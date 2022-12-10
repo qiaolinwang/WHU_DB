@@ -1085,7 +1085,7 @@ class Ui_Admin(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Form"))
+        Form.setWindowTitle(_translate("Form", "管理员客户端"))
         self.pushButton_8.setText(_translate("Form", "添加图书"))
         self.pushButton_9.setText(_translate("Form", "书刊查找"))
         self.pushButton_18.setText(_translate("Form", "修改图书信息"))
