@@ -26,6 +26,7 @@ class ReaderIn(Ui_Reader):
         self.commandLinkButton.clicked.connect(self.display)    #书刊查找界面
         self.commandLinkButton_5.clicked.connect(self.display)  #借书还书界面
         self.commandLinkButton_6.clicked.connect(self.display)  #读者信息修改界面
+        self.commandLinkButton_7.clicked.connect(self.close)
 
     def display(self):
         sender = self.sender()
