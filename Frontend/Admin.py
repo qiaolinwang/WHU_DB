@@ -95,8 +95,7 @@ class Ui_Admin(object):
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_8.setFont(font)
-        self.pushButton_8.setStyleSheet("border-radius:10px;\n"
-"background:rgba(255, 255, 255);")
+        self.pushButton_8.setStyleSheet("QPushButton{\n  border: 1px solid DarkGray;\n	border-radius:10px;\n    background:rgb(255, 255, 255);\n}\nQPushButton:hover{\n    border: 1px solid Gray;\n    background:rgb(255, 255, 255, 90);\n}\nQPushButton:pressed{\n    border: 2px solid DarkGray;\n    background:rgb(255, 255, 255, 30);\n}")
         self.pushButton_8.setIconSize(QtCore.QSize(12, 12))
         self.pushButton_8.setCheckable(False)
         self.pushButton_8.setAutoDefault(False)
@@ -117,8 +116,7 @@ class Ui_Admin(object):
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_9.setFont(font)
-        self.pushButton_9.setStyleSheet("border-radius:10px;\n"
-"background:rgba(255, 255, 255);")
+        self.pushButton_9.setStyleSheet("QPushButton{\n  border: 1px solid DarkGray;\n	border-radius:10px;\n    background:rgb(255, 255, 255);\n}\nQPushButton:hover{\n    border: 1px solid Gray;\n    background:rgb(255, 255, 255, 90);\n}\nQPushButton:pressed{\n    border: 2px solid DarkGray;\n    background:rgb(255, 255, 255, 30);\n}")
         self.pushButton_9.setIconSize(QtCore.QSize(12, 12))
         self.pushButton_9.setCheckable(False)
         self.pushButton_9.setAutoDefault(False)
@@ -139,8 +137,7 @@ class Ui_Admin(object):
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_18.setFont(font)
-        self.pushButton_18.setStyleSheet("border-radius:10px;\n"
-"background:rgba(255, 255, 255);")
+        self.pushButton_18.setStyleSheet("QPushButton{\n  border: 1px solid DarkGray;\n	border-radius:10px;\n    background:rgb(255, 255, 255);\n}\nQPushButton:hover{\n    border: 1px solid Gray;\n    background:rgb(255, 255, 255, 90);\n}\nQPushButton:pressed{\n    border: 2px solid DarkGray;\n    background:rgb(255, 255, 255, 30);\n}")
         self.pushButton_18.setIconSize(QtCore.QSize(12, 12))
         self.pushButton_18.setCheckable(False)
         self.pushButton_18.setAutoDefault(False)
@@ -161,8 +158,7 @@ class Ui_Admin(object):
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_19.setFont(font)
-        self.pushButton_19.setStyleSheet("border-radius:10px;\n"
-"background:rgba(255, 255, 255);")
+        self.pushButton_19.setStyleSheet("QPushButton{\n  border: 1px solid DarkGray;\n	border-radius:10px;\n    background:rgb(255, 255, 255);\n}\nQPushButton:hover{\n    border: 1px solid Gray;\n    background:rgb(255, 255, 255, 90);\n}\nQPushButton:pressed{\n    border: 2px solid DarkGray;\n    background:rgb(255, 255, 255, 30);\n}")
         self.pushButton_19.setIconSize(QtCore.QSize(12, 12))
         self.pushButton_19.setCheckable(False)
         self.pushButton_19.setAutoDefault(False)
@@ -183,8 +179,7 @@ class Ui_Admin(object):
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_21.setFont(font)
-        self.pushButton_21.setStyleSheet("border-radius:10px;\n"
-"background:rgba(255, 255, 255);")
+        self.pushButton_21.setStyleSheet("QPushButton{\n  border: 1px solid DarkGray;\n	border-radius:10px;\n    background:rgb(255, 255, 255);\n}\nQPushButton:hover{\n    border: 1px solid Gray;\n    background:rgb(255, 255, 255, 90);\n}\nQPushButton:pressed{\n    border: 2px solid DarkGray;\n    background:rgb(255, 255, 255, 30);\n}")
         self.pushButton_21.setIconSize(QtCore.QSize(12, 12))
         self.pushButton_21.setCheckable(False)
         self.pushButton_21.setAutoDefault(False)
@@ -205,8 +200,7 @@ class Ui_Admin(object):
         font.setBold(False)
         font.setWeight(50)
         self.pushButton_20.setFont(font)
-        self.pushButton_20.setStyleSheet("border-radius:10px;\n"
-"background:rgba(255, 255, 255);")
+        self.pushButton_20.setStyleSheet("QPushButton{\n  border: 1px solid DarkGray;\n	border-radius:10px;\n    background:rgb(255, 255, 255);\n}\nQPushButton:hover{\n    border: 1px solid Gray;\n    background:rgb(255, 255, 255, 90);\n}\nQPushButton:pressed{\n    border: 2px solid DarkGray;\n    background:rgb(255, 255, 255, 30);\n}")
         self.pushButton_20.setIconSize(QtCore.QSize(12, 12))
         self.pushButton_20.setCheckable(False)
         self.pushButton_20.setAutoDefault(False)
