@@ -123,6 +123,8 @@ class Ui_LoginReader(object):
         self.horizontalLayout_3.setContentsMargins(12, 6, 12, -1)
         self.horizontalLayout_3.setSpacing(14)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+
+
         self.pushButton = QtWidgets.QPushButton(self.frame_5)
         font = QtGui.QFont()
         font.setFamily("微软雅黑 Light")
@@ -130,6 +132,16 @@ class Ui_LoginReader(object):
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_3.addWidget(self.pushButton)
+
+        self.pushButton_3 = QtWidgets.QPushButton(self.frame_5)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(10)
+        self.pushButton_3.setFont(font)
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.horizontalLayout_3.addWidget(self.pushButton_3)
+
+
         self.pushButton_2 = QtWidgets.QPushButton(self.frame_5)
         font = QtGui.QFont()
         font.setFamily("微软雅黑 Light")
@@ -137,6 +149,11 @@ class Ui_LoginReader(object):
         self.pushButton_2.setFont(font)
         self.pushButton_2.setObjectName("pushButton_2")
         self.horizontalLayout_3.addWidget(self.pushButton_2)
+
+
+
+
+
         self.verticalLayout.addWidget(self.frame_5)
         self.verticalLayout.setStretch(0, 1)
         self.verticalLayout.setStretch(1, 3)
@@ -159,3 +176,4 @@ class Ui_LoginReader(object):
         self.lineEdit_2.setPlaceholderText(_translate("Form", "请输入密码"))
         self.pushButton.setText(_translate("Form", "登录"))
         self.pushButton_2.setText(_translate("Form", "返回"))
+        self.pushButton_3.setText(_translate("Form", "注册"))
