@@ -27,7 +27,7 @@ class Ui_LoginReader(object):
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frame_2 = QtWidgets.QFrame(self.frame)
-        self.frame_2.setStyleSheet("border-image: url(picture/pic2.jpg);\n"
+        self.frame_2.setStyleSheet("border-image: url(Frontend/picture/pic2.jpg);\n"
 "border-top-left-radius: 20px;\n"
 "border-bottom-left-radius: 20px;")
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
