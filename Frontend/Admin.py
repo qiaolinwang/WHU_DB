@@ -70,7 +70,7 @@ class Ui_Admin(object):
         self.label.setMaximumSize(QtCore.QSize(250, 300))
         self.label.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("picture/paimon.png"))
+        self.label.setPixmap(QtGui.QPixmap("Frontend/picture/paimon.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
         self.verticalLayout_5.addWidget(self.label)
@@ -252,7 +252,7 @@ class Ui_Admin(object):
         self.verticalLayout_7.addWidget(self.frame_39)
         self.frame_40 = QtWidgets.QFrame(self.page_5)
         self.frame_40.setStyleSheet("QFrame#frame_40{\n"
-"border-image: url(picture/hutao.jpg);\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
 "border-radius:20px\n"
 "}")
         self.frame_40.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -327,7 +327,7 @@ class Ui_Admin(object):
         self.verticalLayout_6.addWidget(self.frame_29)
         self.frame_30 = QtWidgets.QFrame(self.page)
         self.frame_30.setStyleSheet("QFrame#frame_30{\n"
-"border-image: url(picture/hutao.jpg);\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
 "border-radius:20px\n"
 "}")
         self.frame_30.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -540,7 +540,7 @@ class Ui_Admin(object):
         self.verticalLayout_9.addWidget(self.frame_21)
         self.frame_22 = QtWidgets.QFrame(self.page_4)
         self.frame_22.setStyleSheet("QFrame#frame_22{\n"
-"border-image: url(picture/hutao.jpg);\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
 "border-radius:20px\n"
 "}")
         self.frame_22.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -753,7 +753,7 @@ class Ui_Admin(object):
         self.verticalLayout_13.addWidget(self.frame_44)
         self.frame_45 = QtWidgets.QFrame(self.page_6)
         self.frame_45.setStyleSheet("QFrame#frame_45{\n"
-"border-image: url(picture/hutao.jpg);\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
 "border-radius:20px\n"
 "}")
         self.frame_45.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -965,7 +965,7 @@ class Ui_Admin(object):
         self.verticalLayout_3.addWidget(self.frame_11)
         self.frame_17 = QtWidgets.QFrame(self.page_2)
         self.frame_17.setStyleSheet("QFrame#frame_17{\n"
-"border-image: url(picture/hutao.jpg);\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
 "border-radius:20px\n"
 "}")
         self.frame_17.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -1029,7 +1029,7 @@ class Ui_Admin(object):
         self.verticalLayout.addWidget(self.frame_10)
         self.frame_16 = QtWidgets.QFrame(self.page_3)
         self.frame_16.setStyleSheet("QFrame#frame_16{\n"
-"border-image: url(picture/hutao.jpg);\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
 "border-radius:20px\n"
 "}")
         self.frame_16.setFrameShape(QtWidgets.QFrame.StyledPanel)
