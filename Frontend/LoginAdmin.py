@@ -33,7 +33,7 @@ class Ui_LoginAdmin(object):
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frame_2 = QtWidgets.QFrame(self.frame)
-        self.frame_2.setStyleSheet("border-image: url(picture/pic1.jpg);\n"
+        self.frame_2.setStyleSheet("border-image: url(Frontend/picture/pic1.jpg);\n"
 "border-top-left-radius: 20px;\n"
 "border-bottom-left-radius: 20px;")
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -136,13 +136,7 @@ class Ui_LoginAdmin(object):
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout_3.addWidget(self.pushButton)
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame_5)
-        font = QtGui.QFont()
-        font.setFamily("微软雅黑 Light")
-        font.setPointSize(10)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout_3.addWidget(self.pushButton_3)
+
         self.pushButton_2 = QtWidgets.QPushButton(self.frame_5)
         font = QtGui.QFont()
         font.setFamily("微软雅黑 Light")
@@ -172,7 +166,7 @@ class Ui_LoginAdmin(object):
         self.lineEdit_2.setPlaceholderText(_translate("Form", "请输入密码"))
         self.pushButton.setText(_translate("Form", "登录"))
         self.pushButton_2.setText(_translate("Form", "返回"))
-        self.pushButton_3.setText(_translate("Form", "注册"))
+
 
 
 
