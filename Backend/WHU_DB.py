@@ -4,6 +4,8 @@ from pymysql import cursors
 
 class Database:
     def __init__(self):
+        # 创建数据库whu_db 创建读者表whu_reader 创建管理员表whu_admin 创建图书表whu_book
+        # 将mysql参数改成本地参数
         self.host = "localhost"
         self.port = 3306
         self.user = 'root'
@@ -111,6 +113,7 @@ class Database:
             cursor.close()
             db.close()  # 关闭数据库连接
 
+    # 实现浏览图书信息
     def show_book(self):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
                                      port=self.port,
@@ -139,6 +142,7 @@ class Database:
         finally:
             connection.close()  # 关闭连接
 
+    # 实现浏览读者信息
     def show_reader(self):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
                                      port=self.port,
@@ -167,6 +171,7 @@ class Database:
         finally:
             connection.close()  # 关闭连接
 
+    # 实现添加图书
     def insert_book(self, book):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
                                      port=self.port,
@@ -189,6 +194,79 @@ class Database:
         finally:
             connection.close()  # 关闭连接
 
+    def search_book(self, book):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+
+        id = book['id']
+        name = book['name']
+        author = book['author']
+        pubdate = book['pubdate']
+        if id == -1:
+            if not len(name) == 0 and len(author) == 0 and len(pubdate) == 0:
+                sql = "select * from whu_book where name = '%s'" % name
+            elif len(name) == 0 and not len(author) == 0 and len(pubdate) == 0:
+                sql = "select * from whu_book where author = '%s'" % author
+            elif len(name) == 0 and len(author) == 0 and not len(pubdate) == 0:
+                sql = "select * from whu_book where pubdate = '%s'" % pubdate
+            elif not len(name) == 0 and not len(author) == 0 and len(pubdate) == 0:
+                sql = "select * from whu_book where name = '%s' and author = '%s'" % (name, author)
+            elif not len(name) == 0 and len(author) == 0 and not len(pubdate) == 0:
+                sql = "select * from whu_book where name = '%s' and pubdate = '%s'" % (name, pubdate)
+            elif len(name) == 0 and not len(author) == 0 and not len(pubdate) == 0:
+                sql = "select * from whu_book where author = '%s' and pubdate = '%s'" % (author, pubdate)
+            elif not len(name) == 0 and not len(author) == 0 and not len(pubdate) == 0:
+                sql = "select * from whu_book where name = '%s' and author = '%s' and pubdate = '%s'" % (
+                    name, author, pubdate)
+            else:
+                print("错误")
+                connection.close()
+
+            try:
+                # 执行sql语句
+                cur.execute(sql)
+                # 获取所有记录列表
+                results = cur.fetchall()
+                print(results)
+                if type(results) == tuple:
+                    print("查找成功！")
+                    return results
+                else:
+                    print("未找到")
+                    return []
+            except Exception as e:
+                # 错误回滚
+                connection.rollback()
+                raise e
+            finally:
+                connection.close()  # 关闭连接
+
+        else:
+            id = book['id']
+            print(id)
+            sql = "select * from whu_book where id = '%s'" % id
+            try:
+                # 执行sql语句
+                cur.execute(sql)
+                # 获取所有记录列表
+                results = cur.fetchall()
+                if type(results) == tuple:
+                    print("查找成功！")
+                    return results
+                else:
+                    print("未找到")
+                    return []
+            except Exception as e:
+                # 错误回滚
+                connection.rollback()
+                raise e
+            finally:
+                connection.close()  # 关闭连接
+
+
+    # 实现添加读者
     def insert_reader(self, reader):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
                                      port=self.port,
@@ -215,6 +293,6 @@ class Database:
 
 if __name__ == '__main__':
     WHU_DB = Database()
-    test = {'id': 2020301152360, 'name': '假人', 'user': 'test', 'password': '12asdiuags', 'dep': '计算机学院'}
-    WHU_DB.insert_reader(test)
-    print(WHU_DB.show_reader())
+    test = {'id': 10001, 'name': '', 'author': '', 'pubdate': ''}
+    WHU_DB.search_book(test)
+    print(WHU_DB.show_book())
