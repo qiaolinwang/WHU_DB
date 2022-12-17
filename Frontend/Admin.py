@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+
+
 class Ui_Admin(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -986,11 +988,16 @@ class Ui_Admin(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_4.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_4.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+
         self.tableWidget_4.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_4.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.tableWidget_4.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_4.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.tableWidget_4.setHorizontalHeaderItem(3, item)
+        self.tableWidget_4.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
         self.horizontalLayout_6.addWidget(self.tableWidget_4)
         self.verticalLayout_3.addWidget(self.frame_17)
         self.stackedWidget.addWidget(self.page_2)
@@ -1056,13 +1063,18 @@ class Ui_Admin(object):
         item.setFont(font)
         self.tableWidget_3.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_3.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.tableWidget_3.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_3.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.tableWidget_3.setHorizontalHeaderItem(2, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_3.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.tableWidget_3.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_3.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
         self.tableWidget_3.setHorizontalHeaderItem(4, item)
+        self.tableWidget_3.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
         self.horizontalLayout_3.addWidget(self.tableWidget_3)
         self.verticalLayout.addWidget(self.frame_16)
         self.stackedWidget.addWidget(self.page_3)
