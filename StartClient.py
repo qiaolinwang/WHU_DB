@@ -12,6 +12,10 @@ from Frontend.LoginSuper import Ui_LoginSuper
 from Frontend.Admin import Ui_Admin
 from Frontend.MainWin import Ui_MainWin
 from Frontend.Register import Ui_Register
+from Backend.WHU_DB import Database
+import datetime
+import time
+
 
 # 读者界面
 class ReaderIn(Ui_Reader):
@@ -58,6 +62,7 @@ class SupAD(Ui_SuperAD):
             self.stackedWidget.setCurrentIndex(2)
 
 
+# 管理员界面
 class AdminGUI(QWidget, Ui_Admin):
     def __init__(self, parent=None):
         super(AdminGUI, self).__init__(parent)
@@ -73,13 +78,13 @@ class AdminGUI(QWidget, Ui_Admin):
         self.pushButton_20.clicked.connect(self.close)  # 注销账号
         self.Stack = self.stackedWidget
 
-        self.Confirm_3.setEnabled(False)  # 添加图书初始时禁用
+        # self.Confirm_3.setEnabled(False)  # 添加图书初始时禁用
+
         self.Cancel_3.clicked.connect(self.display)
         self.Confirm_2.setEnabled(False)  # 书刊查找初始时禁用
         self.Cancel_2.clicked.connect(self.display)
         self.Confirm_4.setEnabled(False)  # 查找并修改初始时禁用
         self.Cancel_4.clicked.connect(self.display)
-
 
         self.lineEdit_16.setReadOnly(True)
         self.lineEdit_17.setReadOnly(True)
@@ -93,7 +98,6 @@ class AdminGUI(QWidget, Ui_Admin):
         self.lineEdit_6.setReadOnly(True)
         self.lineEdit_9.setReadOnly(True)
         self.lineEdit_7.setReadOnly(True)
-
 
     def display(self):
         sender = self.sender()
@@ -128,10 +132,14 @@ class MainWin(QWidget, Ui_MainWin):
         self.Super = SupAD()
         self.Reader = ReaderIn()
         self.Register = Register()
+        self.WHU_DB = Database()
         self.LoginAdmin.pushButton.clicked.connect(self.EnterAdmin)
         self.LoginSuper.pushButton.clicked.connect(self.EnterSuper)
         self.LoginReader.pushButton.clicked.connect(self.EnterReader)
         self.LoginReader.pushButton_3.clicked.connect(self.displayRegister)
+        self.Admin.Confirm_3.clicked.connect(self.add_book)
+        self.Admin.pushButton_19.clicked.connect(self.browse_book)
+        self.Admin.pushButton_21.clicked.connect(self.browse_reader)
 
 
     def displayReader(self):
@@ -167,7 +175,6 @@ class MainWin(QWidget, Ui_MainWin):
         else:
             QMessageBox.warning(self.LoginAdmin, 'warning', '未找到该管理员！')
 
-
     def EnterSuper(self):
 
         userName = self.LoginSuper.lineEdit.text()  # 获取用户名
@@ -175,12 +182,10 @@ class MainWin(QWidget, Ui_MainWin):
         if len(userName) == 0 or len(password) == 0:
             QMessageBox.warning(self.LoginSuper, 'warning', '请补全用户名或密码！')
         elif userName == 'Super' and password == '123':
-                self.Super.show()
-                self.LoginSuper.close()
+            self.Super.show()
+            self.LoginSuper.close()
         else:
             QMessageBox.warning(self.LoginSuper, 'warning', '未找到该管理员！')
-
-
 
     def EnterReader(self):
 
@@ -189,19 +194,86 @@ class MainWin(QWidget, Ui_MainWin):
         if len(userName) == 0 or len(password) == 0:
             QMessageBox.warning(self.LoginReader, 'warning', '请补全用户名或密码！')
         elif userName == 'Reader' and password == '123':
-                self.Reader.show()
-                self.LoginReader.close()
+            self.Reader.show()
+            self.LoginReader.close()
         else:
             QMessageBox.warning(self.LoginReader, 'warning', '未找到读者，请注册！')
 
     def displayRegister(self, type):
         self.Register.show()
 
+    def browse_book(self):
+        books = self.WHU_DB.show_book()
+        print(books)
+        if not len(books) == 0:
+            try:
+                self.Admin.tableWidget_4.clearContents()
+                self.Admin.tableWidget_4.setRowCount(0)
+                for line in books:
+                    currentRowCount = self.Admin.tableWidget_4.rowCount()
+                    self.Admin.tableWidget_4.insertRow(currentRowCount)
+                    self.Admin.tableWidget_4.setItem(currentRowCount, 0, QTableWidgetItem(line['name']))
+                    self.Admin.tableWidget_4.setItem(currentRowCount, 1, QTableWidgetItem(str(line['id'])))
+                    self.Admin.tableWidget_4.setItem(currentRowCount, 2, QTableWidgetItem(line['author']))
+                    self.Admin.tableWidget_4.setItem(currentRowCount, 3, QTableWidgetItem(str(line['pubdate'].strftime('%Y-%m-%d'))))
+                    self.Admin.tableWidget_4.setEditTriggers(QAbstractItemView.NoEditTriggers)
+                print("浏览图书成功")
+
+            except Exception as e:
+                print(e)
+
+    def browse_reader(self):
+        readers = self.WHU_DB.show_reader()
+        print(readers)
+        if not len(readers) == 0:
+            try:
+                self.Admin.tableWidget_3.clearContents()
+                self.Admin.tableWidget_3.setRowCount(0)
+                for line in readers:
+                    currentRowCount = self.Admin.tableWidget_3.rowCount()
+                    self.Admin.tableWidget_3.insertRow(currentRowCount)
+                    self.Admin.tableWidget_3.setItem(currentRowCount, 0, QTableWidgetItem(line['stu_user']))
+                    self.Admin.tableWidget_3.setItem(currentRowCount, 1, QTableWidgetItem(str(line['stu_password'])))
+                    self.Admin.tableWidget_3.setItem(currentRowCount, 2, QTableWidgetItem(line['stu_name']))
+                    self.Admin.tableWidget_3.setItem(currentRowCount, 3, QTableWidgetItem(str(line['stu_id'])))
+                    self.Admin.tableWidget_3.setItem(currentRowCount, 4, QTableWidgetItem(line['stu_dep']))
+                    self.Admin.tableWidget_3.setEditTriggers(QAbstractItemView.NoEditTriggers)
+                print("浏览图书成功")
+
+            except Exception as e:
+                print(e)
 
 
 
+    def add_book(self):
+        name = self.Admin.Name_3.text()  # 获取书名
+        index = self.Admin.User_5.text()  # 获取索引号
+        author = self.Admin.User_6.text()  # 获取作者
+        pubdate = self.Admin.Port_3.text()  # 获取出版时间
+        splitdate = pubdate.split('-')
 
-
+        if len(name) == 0 or len(index) == 0 or len(author) == 0 or len(pubdate) == 0:
+            QMessageBox.warning(self.Admin, 'warning', '请补全图书信息！')
+        else:
+            if not index.isdigit():
+                QMessageBox.warning(self.Admin, 'warning', '索引号格式错误！')
+            elif not len(splitdate) == 3:
+                QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+            elif splitdate[0].isdigit() and splitdate[1].isdigit() and splitdate[2].isdigit():
+                if int(splitdate[0]) in range(0, 2023) and int(splitdate[1]) in range(1, 13) and int(
+                        splitdate[2]) in range(1, 32):
+                    new_book = {'id': index, 'name': name, 'author': author, 'pubdate': pubdate}
+                    try:
+                        self.WHU_DB.insert_book(new_book)
+                        QMessageBox.information(self.Admin, '通知', '添加图书成功！')
+                        self.Admin.Name_3.clear()
+                        self.Admin.User_5.clear()
+                        self.Admin.User_6.clear()
+                        self.Admin.Port_3.clear()
+                    except Exception as e:
+                        print(e)
+                else:
+                    QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
 
 
 class LoginAdmin(QWidget, Ui_LoginAdmin):
