@@ -78,12 +78,10 @@ class AdminGUI(QWidget, Ui_Admin):
         self.pushButton_20.clicked.connect(self.close)  # 注销账号
         self.Stack = self.stackedWidget
 
-        # self.Confirm_3.setEnabled(False)  # 添加图书初始时禁用
-
         self.Cancel_3.clicked.connect(self.display)
-        self.Confirm_2.setEnabled(False)  # 书刊查找初始时禁用
+
         self.Cancel_2.clicked.connect(self.display)
-        self.Confirm_4.setEnabled(False)  # 查找并修改初始时禁用
+
         self.Cancel_4.clicked.connect(self.display)
 
         self.lineEdit_16.setReadOnly(True)
@@ -105,7 +103,7 @@ class AdminGUI(QWidget, Ui_Admin):
             self.Stack.setCurrentIndex(1)
         elif sender.text() == "书刊查找":
             self.Stack.setCurrentIndex(2)
-        elif sender.text() == "修改图书信息":
+        elif sender.text() == "修改/删除图书":
             self.Stack.setCurrentIndex(3)
         elif sender.text() == "浏览图书信息":
             self.Stack.setCurrentIndex(4)
@@ -140,7 +138,7 @@ class MainWin(QWidget, Ui_MainWin):
         self.Admin.Confirm_3.clicked.connect(self.add_book)
         self.Admin.pushButton_19.clicked.connect(self.browse_book)
         self.Admin.pushButton_21.clicked.connect(self.browse_reader)
-
+        self.Admin.Confirm_2.clicked.connect(self.find_book)
 
     def displayReader(self):
         self.LoginReader.show()
@@ -215,7 +213,8 @@ class MainWin(QWidget, Ui_MainWin):
                     self.Admin.tableWidget_4.setItem(currentRowCount, 0, QTableWidgetItem(line['name']))
                     self.Admin.tableWidget_4.setItem(currentRowCount, 1, QTableWidgetItem(str(line['id'])))
                     self.Admin.tableWidget_4.setItem(currentRowCount, 2, QTableWidgetItem(line['author']))
-                    self.Admin.tableWidget_4.setItem(currentRowCount, 3, QTableWidgetItem(str(line['pubdate'].strftime('%Y-%m-%d'))))
+                    self.Admin.tableWidget_4.setItem(currentRowCount, 3,
+                                                     QTableWidgetItem(str(line['pubdate'].strftime('%Y-%m-%d'))))
                     self.Admin.tableWidget_4.setEditTriggers(QAbstractItemView.NoEditTriggers)
                 print("浏览图书成功")
 
@@ -243,7 +242,60 @@ class MainWin(QWidget, Ui_MainWin):
             except Exception as e:
                 print(e)
 
+    def find_book(self):
+        name = self.Admin.Name_2.text()  # 获取书名
+        index = self.Admin.User_3.text()  # 获取索引号
+        author = self.Admin.User_4.text()  # 获取作者
+        pubdate = self.Admin.Port_2.text()  # 获取出版时间
+        splitdate = pubdate.split('-')
 
+        if len(name) == 0 and len(index) == 0 and len(author) == 0 and len(pubdate) == 0:
+            QMessageBox.warning(self.Admin, 'warning', '请填写至少一项信息！')
+            return
+        else:
+            if not len(index) == 0:
+                if not index.isdigit():
+                    QMessageBox.warning(self.Admin, 'warning', '索引号格式错误！')
+                    return
+            if len(index) == 0:
+                index = -1
+            if not len(pubdate) == 0:
+                if not len(splitdate) == 3:
+                    QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+                    return
+                elif splitdate[0].isdigit() and splitdate[1].isdigit() and splitdate[2].isdigit():
+                    if not int(splitdate[0]) in range(0, 2023) or not int(splitdate[1]) in range(1, 13) or not int(
+                            splitdate[2]) in range(1, 32):
+                        QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+                        return
+                else:
+                    QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+                    return
+            try:
+                searched_book = {'id': index, 'name': name, 'author': author, 'pubdate': pubdate}
+                print(searched_book)
+
+                results = self.WHU_DB.search_book(searched_book)
+                if len(results) == 0:
+                    QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                else:
+                    self.Admin.Name_2.clear()
+                    self.Admin.User_3.clear()
+                    self.Admin.User_4.clear()
+                    self.Admin.Port_2.clear()
+                    self.Admin.stackedWidget.setCurrentIndex(6)
+                    self.Admin.tableWidget_5.clearContents()
+                    self.Admin.tableWidget_5.setRowCount(0)
+                    for line in results:
+                        currentRowCount = self.Admin.tableWidget_5.rowCount()
+                        self.Admin.tableWidget_5.insertRow(currentRowCount)
+                        self.Admin.tableWidget_5.setItem(currentRowCount, 0, QTableWidgetItem(line[0]))
+                        self.Admin.tableWidget_5.setItem(currentRowCount, 1, QTableWidgetItem(str(line[1])))
+                        self.Admin.tableWidget_5.setItem(currentRowCount, 2, QTableWidgetItem(line[2]))
+                        self.Admin.tableWidget_5.setItem(currentRowCount, 3, QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
+                        self.Admin.tableWidget_5.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            except Exception as e:
+                print(e)
 
     def add_book(self):
         name = self.Admin.Name_3.text()  # 获取书名
@@ -274,6 +326,8 @@ class MainWin(QWidget, Ui_MainWin):
                         print(e)
                 else:
                     QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+            else:
+                QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
 
 
 class LoginAdmin(QWidget, Ui_LoginAdmin):
