@@ -230,9 +230,17 @@ class Ui_Admin(object):
         self.horizontalLayout_33 = QtWidgets.QHBoxLayout(self.frame_39)
         self.horizontalLayout_33.setObjectName("horizontalLayout_33")
         self.label_10 = QtWidgets.QLabel(self.frame_39)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_10.setFont(font)
         self.label_10.setObjectName("label_10")
         self.horizontalLayout_33.addWidget(self.label_10)
         self.lineEdit_16 = QtWidgets.QLineEdit(self.frame_39)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_16.setFont(font)
         self.lineEdit_16.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:2px;\n"
@@ -241,9 +249,17 @@ class Ui_Admin(object):
         self.lineEdit_16.setObjectName("lineEdit_16")
         self.horizontalLayout_33.addWidget(self.lineEdit_16)
         self.label_25 = QtWidgets.QLabel(self.frame_39)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_25.setFont(font)
         self.label_25.setObjectName("label_25")
         self.horizontalLayout_33.addWidget(self.label_25)
         self.lineEdit_17 = QtWidgets.QLineEdit(self.frame_39)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_17.setFont(font)
         self.lineEdit_17.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -305,9 +321,17 @@ class Ui_Admin(object):
         self.horizontalLayout_24 = QtWidgets.QHBoxLayout(self.frame_29)
         self.horizontalLayout_24.setObjectName("horizontalLayout_24")
         self.label_9 = QtWidgets.QLabel(self.frame_29)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
         self.horizontalLayout_24.addWidget(self.label_9)
         self.lineEdit_14 = QtWidgets.QLineEdit(self.frame_29)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_14.setFont(font)
         self.lineEdit_14.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:2px;\n"
@@ -316,9 +340,17 @@ class Ui_Admin(object):
         self.lineEdit_14.setObjectName("lineEdit_14")
         self.horizontalLayout_24.addWidget(self.lineEdit_14)
         self.label_20 = QtWidgets.QLabel(self.frame_29)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_20.setFont(font)
         self.label_20.setObjectName("label_20")
         self.horizontalLayout_24.addWidget(self.label_20)
         self.lineEdit_15 = QtWidgets.QLineEdit(self.frame_29)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_15.setFont(font)
         self.lineEdit_15.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -379,6 +411,10 @@ class Ui_Admin(object):
         self.label_21.setObjectName("label_21")
         self.horizontalLayout_28.addWidget(self.label_21)
         self.Name_3 = QtWidgets.QLineEdit(self.frame_34)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.Name_3.setFont(font)
         self.Name_3.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -401,6 +437,10 @@ class Ui_Admin(object):
         self.label_22.setObjectName("label_22")
         self.horizontalLayout_29.addWidget(self.label_22)
         self.User_5 = QtWidgets.QLineEdit(self.frame_35)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.User_5.setFont(font)
         self.User_5.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -423,6 +463,10 @@ class Ui_Admin(object):
         self.label_23.setObjectName("label_23")
         self.horizontalLayout_30.addWidget(self.label_23)
         self.User_6 = QtWidgets.QLineEdit(self.frame_36)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.User_6.setFont(font)
         self.User_6.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -445,6 +489,10 @@ class Ui_Admin(object):
         self.label_24.setObjectName("label_24")
         self.horizontalLayout_31.addWidget(self.label_24)
         self.Port_3 = QtWidgets.QLineEdit(self.frame_37)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.Port_3.setFont(font)
         self.Port_3.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -518,9 +566,17 @@ class Ui_Admin(object):
         self.horizontalLayout_17 = QtWidgets.QHBoxLayout(self.frame_21)
         self.horizontalLayout_17.setObjectName("horizontalLayout_17")
         self.label_8 = QtWidgets.QLabel(self.frame_21)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.horizontalLayout_17.addWidget(self.label_8)
         self.lineEdit_12 = QtWidgets.QLineEdit(self.frame_21)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_12.setFont(font)
         self.lineEdit_12.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:2px;\n"
@@ -529,9 +585,17 @@ class Ui_Admin(object):
         self.lineEdit_12.setObjectName("lineEdit_12")
         self.horizontalLayout_17.addWidget(self.lineEdit_12)
         self.label_15 = QtWidgets.QLabel(self.frame_21)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_15.setFont(font)
         self.label_15.setObjectName("label_15")
         self.horizontalLayout_17.addWidget(self.label_15)
         self.lineEdit_13 = QtWidgets.QLineEdit(self.frame_21)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_13.setFont(font)
         self.lineEdit_13.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -592,6 +656,10 @@ class Ui_Admin(object):
         self.label_16.setObjectName("label_16")
         self.horizontalLayout_20.addWidget(self.label_16)
         self.Name_2 = QtWidgets.QLineEdit(self.frame_25)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.Name_2.setFont(font)
         self.Name_2.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -614,6 +682,10 @@ class Ui_Admin(object):
         self.label_17.setObjectName("label_17")
         self.horizontalLayout_21.addWidget(self.label_17)
         self.User_3 = QtWidgets.QLineEdit(self.frame_26)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.User_3.setFont(font)
         self.User_3.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -636,6 +708,10 @@ class Ui_Admin(object):
         self.label_18.setObjectName("label_18")
         self.horizontalLayout_22.addWidget(self.label_18)
         self.User_4 = QtWidgets.QLineEdit(self.frame_27)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.User_4.setFont(font)
         self.User_4.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -658,6 +734,10 @@ class Ui_Admin(object):
         self.label_19.setObjectName("label_19")
         self.horizontalLayout_23.addWidget(self.label_19)
         self.Port_2 = QtWidgets.QLineEdit(self.frame_28)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.Port_2.setFont(font)
         self.Port_2.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -731,9 +811,17 @@ class Ui_Admin(object):
         self.horizontalLayout_37 = QtWidgets.QHBoxLayout(self.frame_44)
         self.horizontalLayout_37.setObjectName("horizontalLayout_37")
         self.label_11 = QtWidgets.QLabel(self.frame_44)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_11.setFont(font)
         self.label_11.setObjectName("label_11")
         self.horizontalLayout_37.addWidget(self.label_11)
         self.lineEdit_18 = QtWidgets.QLineEdit(self.frame_44)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_18.setFont(font)
         self.lineEdit_18.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:2px;\n"
@@ -742,9 +830,17 @@ class Ui_Admin(object):
         self.lineEdit_18.setObjectName("lineEdit_18")
         self.horizontalLayout_37.addWidget(self.lineEdit_18)
         self.label_26 = QtWidgets.QLabel(self.frame_44)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_26.setFont(font)
         self.label_26.setObjectName("label_26")
         self.horizontalLayout_37.addWidget(self.label_26)
         self.lineEdit_19 = QtWidgets.QLineEdit(self.frame_44)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_19.setFont(font)
         self.lineEdit_19.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -805,6 +901,10 @@ class Ui_Admin(object):
         self.label_27.setObjectName("label_27")
         self.horizontalLayout_40.addWidget(self.label_27)
         self.Name_4 = QtWidgets.QLineEdit(self.frame_48)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.Name_4.setFont(font)
         self.Name_4.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -827,6 +927,10 @@ class Ui_Admin(object):
         self.label_28.setObjectName("label_28")
         self.horizontalLayout_41.addWidget(self.label_28)
         self.User_7 = QtWidgets.QLineEdit(self.frame_49)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.User_7.setFont(font)
         self.User_7.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -849,6 +953,10 @@ class Ui_Admin(object):
         self.label_29.setObjectName("label_29")
         self.horizontalLayout_42.addWidget(self.label_29)
         self.User_8 = QtWidgets.QLineEdit(self.frame_50)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.User_8.setFont(font)
         self.User_8.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -871,6 +979,10 @@ class Ui_Admin(object):
         self.label_30.setObjectName("label_30")
         self.horizontalLayout_43.addWidget(self.label_30)
         self.Port_4 = QtWidgets.QLineEdit(self.frame_51)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.Port_4.setFont(font)
         self.Port_4.setStyleSheet("background:rgba(255,255,255,50);\n"
 "padding:6px;\n"
 "border-radius:10px")
@@ -944,9 +1056,17 @@ class Ui_Admin(object):
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame_11)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
         self.label_4 = QtWidgets.QLabel(self.frame_11)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_5.addWidget(self.label_4)
         self.lineEdit_9 = QtWidgets.QLineEdit(self.frame_11)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_9.setFont(font)
         self.lineEdit_9.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -955,9 +1075,17 @@ class Ui_Admin(object):
         self.lineEdit_9.setObjectName("lineEdit_9")
         self.horizontalLayout_5.addWidget(self.lineEdit_9)
         self.label_5 = QtWidgets.QLabel(self.frame_11)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.horizontalLayout_5.addWidget(self.label_5)
         self.lineEdit_7 = QtWidgets.QLineEdit(self.frame_11)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_7.setFont(font)
         self.lineEdit_7.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -1012,9 +1140,17 @@ class Ui_Admin(object):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.frame_10)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.label_2 = QtWidgets.QLabel(self.frame_10)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_4.addWidget(self.label_2)
         self.lineEdit_8 = QtWidgets.QLineEdit(self.frame_10)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_8.setFont(font)
         self.lineEdit_8.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:2px;\n"
@@ -1023,9 +1159,17 @@ class Ui_Admin(object):
         self.lineEdit_8.setObjectName("lineEdit_8")
         self.horizontalLayout_4.addWidget(self.lineEdit_8)
         self.label_3 = QtWidgets.QLabel(self.frame_10)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_4.addWidget(self.label_3)
         self.lineEdit_6 = QtWidgets.QLineEdit(self.frame_10)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.lineEdit_6.setFont(font)
         self.lineEdit_6.setStyleSheet("\n"
 "background:rgb(255,255,255);\n"
 "border-radius:20px;\n"
@@ -1078,6 +1222,59 @@ class Ui_Admin(object):
         self.horizontalLayout_3.addWidget(self.tableWidget_3)
         self.verticalLayout.addWidget(self.frame_16)
         self.stackedWidget.addWidget(self.page_3)
+        self.page_7 = QtWidgets.QWidget()
+        self.page_7.setObjectName("page_7")
+        self.verticalLayout_14 = QtWidgets.QVBoxLayout(self.page_7)
+        self.verticalLayout_14.setObjectName("verticalLayout_14")
+        self.label_6 = QtWidgets.QLabel(self.page_7)
+        font = QtGui.QFont()
+        font.setFamily("微软雅黑 Light")
+        font.setPointSize(12)
+        self.label_6.setFont(font)
+        self.label_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_14.addWidget(self.label_6)
+        self.frame_4 = QtWidgets.QFrame(self.page_7)
+        self.frame_4.setStyleSheet("QFrame#frame_4{\n"
+"border-image: url(Frontend/picture/hutao.jpg);\n"
+"border-radius:20px\n"
+"}")
+        self.frame_4.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_4.setObjectName("frame_4")
+        self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.frame_4)
+        self.verticalLayout_15.setObjectName("verticalLayout_15")
+        self.tableWidget_5 = QtWidgets.QTableWidget(self.frame_4)
+        self.tableWidget_5.setStyleSheet("QTableWidget#tableWidget_5{\n"
+"background:rgba(255, 255, 255,170);\n"
+"border-radius:20px;\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"}")
+        self.tableWidget_5.setObjectName("tableWidget_5")
+        self.tableWidget_5.setColumnCount(4)
+        self.tableWidget_5.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setBold(False)
+        font.setWeight(50)
+        item.setFont(font)
+        self.tableWidget_5.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.tableWidget_5.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.tableWidget_5.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        self.tableWidget_5.setHorizontalHeaderItem(3, item)
+        self.tableWidget_5.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch)
+        self.verticalLayout_15.addWidget(self.tableWidget_5)
+        self.verticalLayout_14.addWidget(self.frame_4)
+        self.stackedWidget.addWidget(self.page_7)
         self.horizontalLayout.addWidget(self.stackedWidget)
         self.horizontalLayout.setStretch(0, 1)
         self.horizontalLayout.setStretch(1, 4)
@@ -1094,7 +1291,7 @@ class Ui_Admin(object):
         Form.setWindowTitle(_translate("Form", "管理员客户端"))
         self.pushButton_8.setText(_translate("Form", "添加图书"))
         self.pushButton_9.setText(_translate("Form", "书刊查找"))
-        self.pushButton_18.setText(_translate("Form", "修改图书信息"))
+        self.pushButton_18.setText(_translate("Form", "修改/删除图书"))
         self.pushButton_19.setText(_translate("Form", "浏览图书信息"))
         self.pushButton_21.setText(_translate("Form", "查看读者信息"))
         self.pushButton_20.setText(_translate("Form", "账号注销"))
@@ -1125,12 +1322,12 @@ class Ui_Admin(object):
         self.Cancel_2.setText(_translate("Form", "取消"))
         self.label_11.setText(_translate("Form", "欢迎管理员："))
         self.label_26.setText(_translate("Form", "账号密码："))
-        self.label_35.setText(_translate("Form", "修改图书信息"))
+        self.label_35.setText(_translate("Form", "修改/删除图书"))
         self.label_27.setText(_translate("Form", "  书名  "))
         self.label_28.setText(_translate("Form", " 索引号 "))
         self.label_29.setText(_translate("Form", "  作者  "))
         self.label_30.setText(_translate("Form", "出版时间"))
-        self.Confirm_4.setText(_translate("Form", "查找并修改"))
+        self.Confirm_4.setText(_translate("Form", "查找"))
         self.Cancel_4.setText(_translate("Form", "取消"))
         self.label_4.setText(_translate("Form", "欢迎管理员："))
         self.label_5.setText(_translate("Form", "账号密码："))
@@ -1154,5 +1351,13 @@ class Ui_Admin(object):
         item.setText(_translate("Form", "学号"))
         item = self.tableWidget_3.horizontalHeaderItem(4)
         item.setText(_translate("Form", "部门"))
-
+        self.label_6.setText(_translate("Form", "查找结果如下"))
+        item = self.tableWidget_5.horizontalHeaderItem(0)
+        item.setText(_translate("Form", "书名"))
+        item = self.tableWidget_5.horizontalHeaderItem(1)
+        item.setText(_translate("Form", "索引号"))
+        item = self.tableWidget_5.horizontalHeaderItem(2)
+        item.setText(_translate("Form", "作者"))
+        item = self.tableWidget_5.horizontalHeaderItem(3)
+        item.setText(_translate("Form", "出版时间"))
 
