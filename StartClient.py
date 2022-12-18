@@ -152,6 +152,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         self.Super.pushButton.clicked.connect(self.add_admin)
         self.Super.pushButton_2.clicked.connect(self.delete_admin)
         self.Register.pushButton.clicked.connect(self.add_reader)
+        self.Reader.pushButton_3.clicked.connect(self.reader_find_book)
 
     def displayReader(self):
         self.LoginReader.show()
@@ -164,27 +165,29 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
 
     def EnterAdmin(self):
 
-        userName = self.LoginAdmin.lineEdit.text()  # 获取用户名
+        userName = self.LoginAdmin.lineEdit.text()  # 获取工号
         password = self.LoginAdmin.lineEdit_2.text()  # 获取密码
         if len(userName) == 0 or len(password) == 0:
-            QMessageBox.warning(self.LoginAdmin, 'warning', '请补全用户名或密码！')
-        elif userName == 'Admin' and password == '123':
-            self.Admin.lineEdit_16.setText(userName)
-            self.Admin.lineEdit_17.setText(password)
-            self.Admin.lineEdit_14.setText(userName)
-            self.Admin.lineEdit_15.setText(password)
-            self.Admin.lineEdit_12.setText(userName)
-            self.Admin.lineEdit_13.setText(password)
-            self.Admin.lineEdit_18.setText(userName)
-            self.Admin.lineEdit_19.setText(password)
-            self.Admin.lineEdit_8.setText(userName)
-            self.Admin.lineEdit_6.setText(password)
-            self.Admin.lineEdit_9.setText(userName)
-            self.Admin.lineEdit_7.setText(password)
-            self.Admin.show()
-            self.LoginAdmin.close()
+            QMessageBox.warning(self.LoginAdmin, 'warning', '请补全工号或密码！')
         else:
-            QMessageBox.warning(self.LoginAdmin, 'warning', '未找到该管理员！')
+            verify = self.WHU_DB.login_admin(userName, password)
+            if verify:
+                self.Admin.lineEdit_16.setText(userName)
+                self.Admin.lineEdit_17.setText(password)
+                self.Admin.lineEdit_14.setText(userName)
+                self.Admin.lineEdit_15.setText(password)
+                self.Admin.lineEdit_12.setText(userName)
+                self.Admin.lineEdit_13.setText(password)
+                self.Admin.lineEdit_18.setText(userName)
+                self.Admin.lineEdit_19.setText(password)
+                self.Admin.lineEdit_8.setText(userName)
+                self.Admin.lineEdit_6.setText(password)
+                self.Admin.lineEdit_9.setText(userName)
+                self.Admin.lineEdit_7.setText(password)
+                self.Admin.show()
+                self.LoginAdmin.close()
+            else:
+                QMessageBox.warning(self.LoginAdmin, 'warning', '工号或密码错误，请检查！')
 
     def EnterSuper(self):
 
@@ -199,16 +202,17 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             QMessageBox.warning(self.LoginSuper, 'warning', '未找到该管理员！')
 
     def EnterReader(self):
-
-        userName = self.LoginReader.lineEdit.text()  # 获取用户名
+        userName = self.LoginReader.lineEdit.text()  # 获取学号
         password = self.LoginReader.lineEdit_2.text()  # 获取密码
         if len(userName) == 0 or len(password) == 0:
-            QMessageBox.warning(self.LoginReader, 'warning', '请补全用户名或密码！')
-        elif userName == 'Reader' and password == '123':
-            self.Reader.show()
-            self.LoginReader.close()
+            QMessageBox.warning(self.LoginReader, 'warning', '请补全学号或密码！')
         else:
-            QMessageBox.warning(self.LoginReader, 'warning', '未找到读者，请注册！')
+            verify = self.WHU_DB.login_reader(userName, password)
+            if verify:
+                self.Reader.show()
+                self.LoginReader.close()
+            else:
+                QMessageBox.warning(self.LoginReader, 'warning', '学号或密码错误！')
 
     def displayRegister(self, type):
         self.Register.show()
@@ -435,6 +439,64 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                             print(e)
                     else:
                         pass
+
+    def find_reader(self):
+        pass
+
+    def reader_find_book(self):
+        name = self.Reader.lineEdit_6.text()  # 获取书名
+        index = self.Reader.lineEdit_9.text()   # 获取索引号
+        author = self.Reader.lineEdit_12.text()   # 获取作者
+        fardate = self.Reader.lineEdit_10.text()
+        neardate = self.Reader.lineEdit_11.text()
+
+        splitdate1 = fardate.split('-')
+        splitdate2 = neardate.split('-')
+
+        if len(name) == 0 and len(index) == 0 and len(author) == 0 and (len(fardate) == 0 and len(neardate) == 0):
+            QMessageBox.warning(self.Reader, 'warning', '请填写至少一栏信息！')
+            return
+        else:
+            if not len(index) == 0:
+                if not index.isdigit():
+                    QMessageBox.warning(self.Reader, 'warning', '索引号格式错误！')
+                    return
+            if len(index) == 0:
+                index = -1
+            if (len(fardate) == 0 and not len(neardate) == 0) or (not len(fardate) == 0 and len(neardate) == 0):
+                QMessageBox.warning(self.Reader, 'warning', '请补全出版时间范围！')
+            if not len(fardate) == 0 and not len(neardate) == 0:
+                if not len(splitdate1) == 3 or not len(splitdate2) == 3:
+                    QMessageBox.warning(self.Reader, 'warning', '出版时间格式错误！')
+                    return
+                elif splitdate1[0].isdigit() and splitdate1[1].isdigit() and splitdate1[2].isdigit() and splitdate2[0].isdigit() and splitdate2[1].isdigit() and splitdate2[2].isdigit():
+                    if not int(splitdate1[0]) in range(0, 2023) or not int(splitdate1[1]) in range(1, 13) or not int(splitdate1[2]) in range(1, 32) or not int(splitdate2[0]) in range(0, 2023) or not int(splitdate2[1]) in range(1, 13) or not int(splitdate2[2]) in range(1, 32):
+                        QMessageBox.warning(self.Reader, 'warning', '出版时间格式错误！')
+                        return
+                else:
+                    QMessageBox.warning(self.Reader, 'warning', '出版时间格式错误！')
+                    return
+            try:
+                searched_book = {'id': index, 'name': name, 'author': author, 'fardate': fardate, 'neardate': neardate}
+                print(searched_book)
+
+                results = self.WHU_DB.reader_search_book(searched_book)
+                if len(results) == 0:
+                    QMessageBox.warning(self.Reader, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                else:
+                    self.Reader.tableWidget.clearContents()
+                    self.Reader.tableWidget.setRowCount(0)
+                    for line in results:
+                        currentRowCount = self.Reader.tableWidget.rowCount()
+                        self.Reader.tableWidget.insertRow(currentRowCount)
+                        self.Reader.tableWidget.setItem(currentRowCount, 0, QTableWidgetItem(line[0]))
+                        self.Reader.tableWidget.setItem(currentRowCount, 1, QTableWidgetItem(str(line[1])))
+                        self.Reader.tableWidget.setItem(currentRowCount, 2, QTableWidgetItem(line[2]))
+                        self.Reader.tableWidget.setItem(currentRowCount, 3,
+                                                         QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
+                        self.Reader.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            except Exception as e:
+                print(e)
 
     def delete_book(self):
         index = self.Admin.User_9.text()
