@@ -170,8 +170,8 @@ class Ui_LoginReader(object):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
         self.label_3.setText(_translate("Form", "读者登录"))
-        self.label.setText(_translate("Form", "用户名："))
-        self.lineEdit.setPlaceholderText(_translate("Form", "请输入用户名"))
+        self.label.setText(_translate("Form", " 学  号："))
+        self.lineEdit.setPlaceholderText(_translate("Form", "请输入学号"))
         self.label_2.setText(_translate("Form", " 密  码："))
         self.lineEdit_2.setPlaceholderText(_translate("Form", "请输入密码"))
         self.pushButton.setText(_translate("Form", "登录"))
