@@ -29,16 +29,22 @@ class ReaderIn(Ui_Reader):
         self.retranslateUi(self)
 
         self.commandLinkButton.clicked.connect(self.display)  # 书刊查找界面
-        self.commandLinkButton_5.clicked.connect(self.display)  # 借书还书界面
+
         self.commandLinkButton_6.clicked.connect(self.display)  # 读者信息修改界面
         self.commandLinkButton_7.clicked.connect(self.close)
+        self.pushButton.clicked.connect(self.reset)
+
+    def reset(self):
+        self.lineEdit.clear()
+        self.lineEdit_2.clear()
+        self.lineEdit_3.clear()
+        self.lineEdit_4.clear()
+        self.lineEdit_5.clear()
 
     def display(self):
         sender = self.sender()
         if sender.text() == "书刊查找":
             self.stackedWidget.setCurrentIndex(1)
-        elif sender.text() == "借书/还书":
-            self.stackedWidget.setCurrentIndex(2)
         elif sender.text() == "读者信息修改":
             self.stackedWidget.setCurrentIndex(0)
 
@@ -153,6 +159,38 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         self.Super.pushButton_2.clicked.connect(self.delete_admin)
         self.Register.pushButton.clicked.connect(self.add_reader)
         self.Reader.pushButton_3.clicked.connect(self.reader_find_book)
+        self.Reader.pushButton_2.clicked.connect(self.modify_reader)
+        self.Reader.pushButton_4.clicked.connect(self.borrow_book)
+        self.Reader.pushButton_5.clicked.connect(self.return_book)
+        self.Reader.commandLinkButton_5.clicked.connect(self.displayRentBorrow)  # 借书还书界面
+        self.CurrentReader = -1
+
+    def displayRentBorrow(self):
+        sender = self.Reader.sender()
+        if sender.text() == "借书/还书":
+            if not self.CurrentReader == -1:
+                stu_id = self.CurrentReader
+                try:
+                    results = self.WHU_DB.browse_rent(stu_id)
+                    self.Reader.tableWidget_2.clearContents()
+                    self.Reader.tableWidget_2.setRowCount(0)
+                    if not len(results) == 0:
+                        for line in results:
+                            searched_book = {'id': line[0], 'name': '', 'author': '', 'pubdate': ''}
+                            book = self.WHU_DB.search_book(searched_book)
+                            print(book)
+                            currentRowCount = self.Reader.tableWidget_2.rowCount()
+                            self.Reader.tableWidget_2.insertRow(currentRowCount)
+                            self.Reader.tableWidget_2.setItem(currentRowCount, 0, QTableWidgetItem(book[0][0]))
+                            self.Reader.tableWidget_2.setItem(currentRowCount, 1, QTableWidgetItem(book[0][2]))
+                            self.Reader.tableWidget_2.setItem(currentRowCount, 2, QTableWidgetItem(str(book[0][3].strftime('%Y-%m-%d'))))
+                            self.Reader.tableWidget_2.setItem(currentRowCount, 3, QTableWidgetItem(str(book[0][1])))
+                            self.Reader.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+                except Exception as e:
+                    print(e)
+            else:
+                print("CurrentReader为-1")
+            self.Reader.stackedWidget.setCurrentIndex(2)
 
     def displayReader(self):
         self.LoginReader.show()
@@ -202,6 +240,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             QMessageBox.warning(self.LoginSuper, 'warning', '未找到该管理员！')
 
     def EnterReader(self):
+        self.CurrentReader = -1
         userName = self.LoginReader.lineEdit.text()  # 获取学号
         password = self.LoginReader.lineEdit_2.text()  # 获取密码
         if len(userName) == 0 or len(password) == 0:
@@ -209,6 +248,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         else:
             verify = self.WHU_DB.login_reader(userName, password)
             if verify:
+                self.CurrentReader = userName
                 self.Reader.show()
                 self.LoginReader.close()
             else:
@@ -232,6 +272,10 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     self.Admin.tableWidget_4.setItem(currentRowCount, 2, QTableWidgetItem(line['author']))
                     self.Admin.tableWidget_4.setItem(currentRowCount, 3,
                                                      QTableWidgetItem(str(line['pubdate'].strftime('%Y-%m-%d'))))
+                    if line['rent_stu_id'] == -1:
+                        self.Admin.tableWidget_4.setItem(currentRowCount, 4, QTableWidgetItem("暂未借出"))
+                    else:
+                        self.Admin.tableWidget_4.setItem(currentRowCount, 4, QTableWidgetItem(str(line['rent_stu_id'])))
                     self.Admin.tableWidget_4.setEditTriggers(QAbstractItemView.NoEditTriggers)
                 print("浏览图书成功")
 
@@ -440,13 +484,39 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     else:
                         pass
 
-    def find_reader(self):
-        pass
+    # 实现读者信息修改
+    def modify_reader(self):
+        name = self.Reader.lineEdit.text()
+        id = self.Reader.lineEdit_2.text()
+        dep = self.Reader.lineEdit_3.text()
+        oldpassword = self.Reader.lineEdit_4.text()
+        newpassword = self.Reader.lineEdit_5.text()
+        if len(name) == 0 or len(id) == 0 or len(dep) == 0 or len(oldpassword) == 0 or len(newpassword) == 0:
+            QMessageBox.warning(self.Reader, 'warning', '请补全读者信息！')
+        elif not id.isdigit():
+            QMessageBox.warning(self.Reader, 'warning', '学号格式错误！')
+        else:
+            reader = {'id': id, 'name': name, 'dep': dep, 'oldpassword': oldpassword, 'newpassword': newpassword}
+            try:
+                verify = self.WHU_DB.reader_modify(reader)
+                if verify:
+                    QMessageBox.information(self.Admin, '通知', '修改读者成功！')
+                    self.Reader.lineEdit.clear()
+                    self.Reader.lineEdit_2.clear()
+                    self.Reader.lineEdit_3.clear()
+                    self.Reader.lineEdit_4.clear()
+                    self.Reader.lineEdit_5.clear()
 
+                else:
+                    QMessageBox.warning(self.Reader, '错误', '请检查学号和原密码是否正确！')
+            except Exception as e:
+                print(e)
+
+    # 实现读者界面的书刊查找
     def reader_find_book(self):
         name = self.Reader.lineEdit_6.text()  # 获取书名
-        index = self.Reader.lineEdit_9.text()   # 获取索引号
-        author = self.Reader.lineEdit_12.text()   # 获取作者
+        index = self.Reader.lineEdit_9.text()  # 获取索引号
+        author = self.Reader.lineEdit_12.text()  # 获取作者
         fardate = self.Reader.lineEdit_10.text()
         neardate = self.Reader.lineEdit_11.text()
 
@@ -469,8 +539,11 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                 if not len(splitdate1) == 3 or not len(splitdate2) == 3:
                     QMessageBox.warning(self.Reader, 'warning', '出版时间格式错误！')
                     return
-                elif splitdate1[0].isdigit() and splitdate1[1].isdigit() and splitdate1[2].isdigit() and splitdate2[0].isdigit() and splitdate2[1].isdigit() and splitdate2[2].isdigit():
-                    if not int(splitdate1[0]) in range(0, 2023) or not int(splitdate1[1]) in range(1, 13) or not int(splitdate1[2]) in range(1, 32) or not int(splitdate2[0]) in range(0, 2023) or not int(splitdate2[1]) in range(1, 13) or not int(splitdate2[2]) in range(1, 32):
+                elif splitdate1[0].isdigit() and splitdate1[1].isdigit() and splitdate1[2].isdigit() and splitdate2[
+                    0].isdigit() and splitdate2[1].isdigit() and splitdate2[2].isdigit():
+                    if not int(splitdate1[0]) in range(0, 2023) or not int(splitdate1[1]) in range(1, 13) or not int(
+                            splitdate1[2]) in range(1, 32) or not int(splitdate2[0]) in range(0, 2023) or not int(
+                        splitdate2[1]) in range(1, 13) or not int(splitdate2[2]) in range(1, 32):
                         QMessageBox.warning(self.Reader, 'warning', '出版时间格式错误！')
                         return
                 else:
@@ -491,9 +564,10 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         self.Reader.tableWidget.insertRow(currentRowCount)
                         self.Reader.tableWidget.setItem(currentRowCount, 0, QTableWidgetItem(line[0]))
                         self.Reader.tableWidget.setItem(currentRowCount, 1, QTableWidgetItem(line[2]))
-                        self.Reader.tableWidget.setItem(currentRowCount, 2, QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
+                        self.Reader.tableWidget.setItem(currentRowCount, 2,
+                                                        QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
                         self.Reader.tableWidget.setItem(currentRowCount, 3,
-                                                         QTableWidgetItem(str(line[1])))
+                                                        QTableWidgetItem(str(line[1])))
                         self.Reader.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
             except Exception as e:
                 print(e)
@@ -641,6 +715,84 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             except Exception as e:
                 print(e)
 
+    # 实现借书
+    def borrow_book(self):
+        book_id = self.Reader.lineEdit_7.text()
+        if len(book_id) == 0:
+            QMessageBox.warning(self.Reader, '警告', '请填写借书索引')
+        elif not book_id.isdigit():
+            QMessageBox.warning(self.Reader, '警告', '索引格式错误')
+        else:
+            try:
+                stu_id = self.CurrentReader
+                return_num = self.WHU_DB.book_rent(book_id, stu_id)
+                if return_num == 1:
+                    QMessageBox.warning(self.Reader, '警告', '未找到要借的图书,请检查索引')
+                if return_num == 2:
+                    QMessageBox.warning(self.Reader, '警告', '该图书已被借阅')
+                if return_num == 3:
+                    QMessageBox.information(self.Reader, '通知', '借阅成功！')
+                if return_num == 4:
+                    QMessageBox.warning(self.Reader, '警告', '有bug')
+                results = self.WHU_DB.browse_rent(stu_id)
+                self.Reader.tableWidget_2.clearContents()
+                self.Reader.tableWidget_2.setRowCount(0)
+                if not len(results) == 0:
+                    for line in results:
+                        searched_book = {'id': line[0], 'name': '', 'author': '', 'pubdate': ''}
+                        book = self.WHU_DB.search_book(searched_book)
+                        print(book)
+                        currentRowCount = self.Reader.tableWidget_2.rowCount()
+                        self.Reader.tableWidget_2.insertRow(currentRowCount)
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 0, QTableWidgetItem(book[0][0]))
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 1, QTableWidgetItem(book[0][2]))
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 2,
+                                                          QTableWidgetItem(str(book[0][3].strftime('%Y-%m-%d'))))
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 3, QTableWidgetItem(str(book[0][1])))
+                        self.Reader.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            except Exception as e:
+                print(e)
+
+    # 实现还书
+    def return_book(self):
+        book_id = self.Reader.lineEdit_13.text()
+        if len(book_id) == 0:
+            QMessageBox.warning(self.Reader, '警告', '请填写还书索引')
+        elif not book_id.isdigit():
+            QMessageBox.warning(self.Reader, '警告', '索引格式错误')
+        else:
+            try:
+                stu_id = self.CurrentReader
+                return_num = self.WHU_DB.book_return(book_id, stu_id)
+                if return_num == 1:
+                    QMessageBox.warning(self.Reader, '警告', '未找到要还的图书,请检查索引')
+                if return_num == 2:
+                    QMessageBox.warning(self.Reader, '警告', '该图书未被借阅')
+                if return_num == 3:
+                    QMessageBox.warning(self.Reader, '警告', '无权归还此书')
+                if return_num == 4:
+                    QMessageBox.information(self.Reader, '通知', '归还成功！')
+                if return_num == 5:
+                    QMessageBox.warning(self.Reader, '警告', '有bug')
+                results = self.WHU_DB.browse_rent(stu_id)
+                self.Reader.tableWidget_2.clearContents()
+                self.Reader.tableWidget_2.setRowCount(0)
+                if not len(results) == 0:
+                    for line in results:
+                        searched_book = {'id': line[0], 'name': '', 'author': '', 'pubdate': ''}
+                        book = self.WHU_DB.search_book(searched_book)
+                        print(book)
+                        currentRowCount = self.Reader.tableWidget_2.rowCount()
+                        self.Reader.tableWidget_2.insertRow(currentRowCount)
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 0, QTableWidgetItem(book[0][0]))
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 1, QTableWidgetItem(book[0][2]))
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 2,
+                                                          QTableWidgetItem(str(book[0][3].strftime('%Y-%m-%d'))))
+                        self.Reader.tableWidget_2.setItem(currentRowCount, 3, QTableWidgetItem(str(book[0][1])))
+                        self.Reader.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            except Exception as e:
+                print(e)
+
 
 # 管理员登录界面
 class LoginAdmin(QWidget, Ui_LoginAdmin):
@@ -649,7 +801,7 @@ class LoginAdmin(QWidget, Ui_LoginAdmin):
 
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.close)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
         self.setAttribute(Qt.WA_TranslucentBackground)
 
     def mouseMoveEvent(self, e: QMouseEvent):  # 重写移动事件
@@ -705,7 +857,7 @@ class LoginSuper(QWidget, Ui_LoginSuper):
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.close)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
         self.setAttribute(Qt.WA_TranslucentBackground)
 
     def mouseMoveEvent(self, e: QMouseEvent):  # 重写移动事件
