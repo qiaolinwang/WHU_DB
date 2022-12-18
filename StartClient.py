@@ -16,6 +16,9 @@ from Backend.WHU_DB import Database
 import datetime
 import time
 
+SuperUser = 'Super'  # 超级管理员用户名
+SuperPassword = '123'  # 超级管理员密码
+
 
 # 读者界面
 class ReaderIn(Ui_Reader):
@@ -115,7 +118,8 @@ class AdminGUI(QWidget, Ui_Admin):
             self.Stack.setCurrentIndex(0)
 
 
-class MainWin(QWidget, Ui_MainWin):
+# 主界面
+class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
     def __init__(self, parent=None):
         super(MainWin, self).__init__(parent)
 
@@ -144,6 +148,10 @@ class MainWin(QWidget, Ui_MainWin):
         self.Admin.Confirm_4.clicked.connect(self.check_book)
         self.Admin.Confirm_5.clicked.connect(self.modify_book)
         self.Admin.Confirm_6.clicked.connect(self.delete_book)
+        self.Super.doQuery.clicked.connect(self.find_admin)
+        self.Super.pushButton.clicked.connect(self.add_admin)
+        self.Super.pushButton_2.clicked.connect(self.delete_admin)
+        self.Register.pushButton.clicked.connect(self.add_reader)
 
     def displayReader(self):
         self.LoginReader.show()
@@ -184,7 +192,7 @@ class MainWin(QWidget, Ui_MainWin):
         password = self.LoginSuper.lineEdit_2.text()  # 获取密码
         if len(userName) == 0 or len(password) == 0:
             QMessageBox.warning(self.LoginSuper, 'warning', '请补全用户名或密码！')
-        elif userName == 'Super' and password == '123':
+        elif userName == SuperUser and password == SuperPassword:
             self.Super.show()
             self.LoginSuper.close()
         else:
@@ -225,6 +233,8 @@ class MainWin(QWidget, Ui_MainWin):
 
             except Exception as e:
                 print(e)
+        else:
+            QMessageBox.warning(self.Admin, '警告', '暂无图书信息！')
 
     def browse_reader(self):
         readers = self.WHU_DB.show_reader()
@@ -242,10 +252,12 @@ class MainWin(QWidget, Ui_MainWin):
                     self.Admin.tableWidget_3.setItem(currentRowCount, 3, QTableWidgetItem(str(line['stu_id'])))
                     self.Admin.tableWidget_3.setItem(currentRowCount, 4, QTableWidgetItem(line['stu_dep']))
                     self.Admin.tableWidget_3.setEditTriggers(QAbstractItemView.NoEditTriggers)
-                print("浏览图书成功")
+                print("浏览读者成功")
 
             except Exception as e:
                 print(e)
+        else:
+            QMessageBox.warning(self.Admin, '警告', '暂无读者信息！')
 
     def find_book(self):
         name = self.Admin.Name_2.text()  # 获取书名
@@ -447,11 +459,128 @@ class MainWin(QWidget, Ui_MainWin):
         else:
             pass
 
+    # 实现添加管理员
+    def add_admin(self):
+        user = self.Super.lineEdit_3.text()
+        id = self.Super.lineEdit_2.text()
+        password = self.Super.lineEdit_4.text()
+        if len(user) == 0 or len(id) == 0 or len(password) == 0:
+            QMessageBox.warning(self.Super, '警告', '请补全管理员信息！')
+            return
+        elif not id.isdigit():
+            QMessageBox.warning(self.Super, '警告', '管理员工号格式错误！')
+            return
+        else:
+            admin = {'id': id, 'user': user, 'password': password}
+            try:
+                self.WHU_DB.insert_admin(admin)
+                QMessageBox.information(self.Super, '通知', '添加管理员成功！')
+                self.Super.lineEdit_3.clear()
+                self.Super.lineEdit_2.clear()
+                self.Super.lineEdit_4.clear()
+            except Exception as e:
+                print(e)
+
+    # 实现查找管理员
+    def find_admin(self):
+        id = self.Super.lineEdit.text()
+        if len(id) == 0:
+            admins = self.WHU_DB.show_admin()
+            print(admins)
+            if not len(admins) == 0:
+                try:
+                    self.Super.tableWidget.clearContents()
+                    self.Super.tableWidget.setRowCount(0)
+                    for line in admins:
+                        currentRowCount = self.Super.tableWidget.rowCount()
+                        self.Super.tableWidget.insertRow(currentRowCount)
+                        self.Super.tableWidget.setItem(currentRowCount, 0, QTableWidgetItem(str(line['admin_id'])))
+                        self.Super.tableWidget.setItem(currentRowCount, 1, QTableWidgetItem(line['admin_user']))
+                        self.Super.tableWidget.setItem(currentRowCount, 2, QTableWidgetItem(line['admin_password']))
+                        self.Super.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+                    print("浏览管理员成功")
+                except Exception as e:
+                    print(e)
+            else:
+                QMessageBox.warning(self.Super, '警告', '暂无管理员信息！')
+
+        elif not id.isdigit():
+            QMessageBox.warning(self.Super, '警告', '管理员工号格式错误！')
+            return
+        else:
+            try:
+                results = self.WHU_DB.search_admin(id)
+                if len(results) == 0:
+                    QMessageBox.warning(self.Super, '警告', '未找到管理员，请检查工号是否正确！')
+                    return
+                else:
+                    self.Super.tableWidget.clearContents()
+                    self.Super.tableWidget.setRowCount(0)
+                    currentRowCount = self.Super.tableWidget.rowCount()
+                    self.Super.tableWidget.insertRow(currentRowCount)
+                    self.Super.tableWidget.setItem(currentRowCount, 0, QTableWidgetItem(str(results[0][1])))
+                    self.Super.tableWidget.setItem(currentRowCount, 1, QTableWidgetItem(results[0][0]))
+                    self.Super.tableWidget.setItem(currentRowCount, 2, QTableWidgetItem(results[0][2]))
+                    self.Super.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            except Exception as e:
+                print(e)
+
+    # 实现删除管理员
+    def delete_admin(self):
+        id = self.Super.lineEdit_5.text()
+        if len(id) == 0:
+            QMessageBox.warning(self.Super, '警告', '请补全工号！')
+            return
+        elif not id.isdigit():
+            QMessageBox.warning(self.Super, '警告', '管理员工号格式错误！')
+            return
+        else:
+            results = self.WHU_DB.search_admin(id)
+            if len(results) == 0:
+                QMessageBox.warning(self.Super, '警告', '未找到管理员，请检查工号是否正确！')
+                return
+            else:
+                reply = QMessageBox.question(self.Super,
+                                             '询问',
+                                             "确定要删除该管理员吗？",
+                                             QMessageBox.Yes | QMessageBox.No,
+                                             QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    try:
+                        self.WHU_DB.admin_delete(id)
+                        self.Super.lineEdit_5.clear()
+                        QMessageBox.information(self.Super, '通知', '删除管理员成功！')
+                    except Exception as e:
+                        print(e)
+                else:
+                    pass
+
+    # 实现读者注册（添加读者）
+    def add_reader(self):
+        user = self.Register.lineEdit_4.text()
+        password = self.Register.lineEdit_2.text()
+        name = self.Register.lineEdit_5.text()
+        dep = self.Register.lineEdit_6.text()
+        id = self.Register.lineEdit_7.text()
+        if len(user) == 0 or len(id) == 0 or len(password) == 0 or len(name) == 0 or len(dep) == 0:
+            QMessageBox.warning(self.Register, '警告', '请补全用户信息！')
+            return
+        elif not id.isdigit():
+            QMessageBox.warning(self.Register, '警告', '学号格式错误！')
+            return
+        else:
+            reader = {'id': id, 'name': name, 'password': password, 'dep': dep, 'user': user}
+            try:
+                self.WHU_DB.insert_reader(reader)
+                QMessageBox.information(self.Register, '通知', '用户注册成功！')
+                self.Register.close()
+                self.displayReader()
+
+            except Exception as e:
+                print(e)
 
 
-
-
-
+# 管理员登录界面
 class LoginAdmin(QWidget, Ui_LoginAdmin):
     def __init__(self, parent=None):
         super(LoginAdmin, self).__init__()
@@ -478,6 +607,7 @@ class LoginAdmin(QWidget, Ui_LoginAdmin):
             self._endPos = None
 
 
+# 读者登录界面
 class LoginReader(QWidget, Ui_LoginReader):
     def __init__(self, parent=None):
         super(LoginReader, self).__init__()
@@ -485,7 +615,7 @@ class LoginReader(QWidget, Ui_LoginReader):
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.close)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
         self.setAttribute(Qt.WA_TranslucentBackground)
 
     def mouseMoveEvent(self, e: QMouseEvent):  # 重写移动事件
@@ -505,6 +635,7 @@ class LoginReader(QWidget, Ui_LoginReader):
             self._endPos = None
 
 
+# 超级管理员登录界面
 class LoginSuper(QWidget, Ui_LoginSuper):
     def __init__(self, parent=None):
         super(LoginSuper, self).__init__()
@@ -532,13 +663,14 @@ class LoginSuper(QWidget, Ui_LoginSuper):
             self._endPos = None
 
 
+# 读者注册界面
 class Register(QWidget, Ui_Register):
     def __init__(self, parent=None):
         super(Register, self).__init__()
         self.setupUi(self)
         self.pushButton_2.clicked.connect(self.close)
 
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
+        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint | Qt.Tool)  # 窗口置顶，无边框，在任务栏不显示图标
         self.setAttribute(Qt.WA_TranslucentBackground)
 
     def mouseMoveEvent(self, e: QMouseEvent):  # 重写移动事件
