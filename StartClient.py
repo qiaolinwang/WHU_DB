@@ -84,6 +84,8 @@ class AdminGUI(QWidget, Ui_Admin):
 
         self.Cancel_4.clicked.connect(self.display)
 
+        self.Cancel_5.clicked.connect(self.display)
+
         self.lineEdit_16.setReadOnly(True)
         self.lineEdit_17.setReadOnly(True)
         self.lineEdit_14.setReadOnly(True)
@@ -139,6 +141,9 @@ class MainWin(QWidget, Ui_MainWin):
         self.Admin.pushButton_19.clicked.connect(self.browse_book)
         self.Admin.pushButton_21.clicked.connect(self.browse_reader)
         self.Admin.Confirm_2.clicked.connect(self.find_book)
+        self.Admin.Confirm_4.clicked.connect(self.check_book)
+        self.Admin.Confirm_5.clicked.connect(self.modify_book)
+        self.Admin.Confirm_6.clicked.connect(self.delete_book)
 
     def displayReader(self):
         self.LoginReader.show()
@@ -292,7 +297,8 @@ class MainWin(QWidget, Ui_MainWin):
                         self.Admin.tableWidget_5.setItem(currentRowCount, 0, QTableWidgetItem(line[0]))
                         self.Admin.tableWidget_5.setItem(currentRowCount, 1, QTableWidgetItem(str(line[1])))
                         self.Admin.tableWidget_5.setItem(currentRowCount, 2, QTableWidgetItem(line[2]))
-                        self.Admin.tableWidget_5.setItem(currentRowCount, 3, QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
+                        self.Admin.tableWidget_5.setItem(currentRowCount, 3,
+                                                         QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
                         self.Admin.tableWidget_5.setEditTriggers(QAbstractItemView.NoEditTriggers)
             except Exception as e:
                 print(e)
@@ -328,6 +334,122 @@ class MainWin(QWidget, Ui_MainWin):
                     QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
             else:
                 QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+
+    def check_book(self):
+        name = self.Admin.Name_4.text()  # 获取书名
+        index = self.Admin.User_7.text()  # 获取索引号
+        author = self.Admin.User_8.text()  # 获取作者
+        pubdate = self.Admin.Port_4.text()  # 获取出版时间
+        splitdate = pubdate.split('-')
+
+        if len(index) == 0 and (len(name) == 0 or len(author) == 0 or len(pubdate) == 0):
+            # 至少要输入索引号进行查找
+            QMessageBox.warning(self.Admin, 'warning', '请补全图书信息！')
+            return
+        elif not len(index) == 0:
+            if not len(index) == 0:
+                if not index.isdigit():
+                    QMessageBox.warning(self.Admin, 'warning', '索引号格式错误！')
+                    return
+            if not len(pubdate) == 0:
+                if not len(splitdate) == 3:
+                    QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+                    return
+                elif splitdate[0].isdigit() and splitdate[1].isdigit() and splitdate[2].isdigit():
+                    if not int(splitdate[0]) in range(0, 2023) or not int(splitdate[1]) in range(1, 13) or not int(
+                            splitdate[2]) in range(1, 32):
+                        QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+                        return
+            try:
+                searched_book = {'id': index, 'name': name, 'author': author, 'pubdate': pubdate}
+                print(searched_book)
+                results = self.WHU_DB.search_book(searched_book)
+                if len(results) == 0:
+                    QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                else:
+                    # 进入修改和删除页面
+                    self.Admin.stackedWidget.setCurrentIndex(7)
+                    self.Admin.lineEdit.setText(results[0][0])
+                    self.Admin.lineEdit_2.setText(str(results[0][1]))
+                    self.Admin.lineEdit_3.setText(results[0][2])
+                    self.Admin.lineEdit_4.setText(str(results[0][3].strftime('%Y-%m-%d')))
+                    self.Admin.User_9.setText(index)
+
+            except Exception as e:
+                print(e)
+
+    def modify_book(self):
+        name = self.Admin.Name_5.text()  # 获取书名
+        index = self.Admin.User_9.text()  # 获取索引号
+        author = self.Admin.User_10.text()  # 获取作者
+        pubdate = self.Admin.Port_5.text()  # 获取出版时间
+        splitdate = pubdate.split('-')
+        oldname = self.Admin.lineEdit.text()
+        oldauthor = self.Admin.lineEdit_3.text()
+        oldpubdate = self.Admin.lineEdit_4.text()
+        if name == oldname and author == oldauthor and pubdate == oldpubdate:
+            QMessageBox.warning(self.Admin, 'warning', '请至少修改一项信息！')
+            return
+        if len(name) == 0 or len(author) == 0 or len(pubdate) == 0:
+            QMessageBox.warning(self.Admin, 'warning', '请补全图书信息！')
+            return
+        else:
+            if not len(splitdate) == 3:
+                QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
+                return
+            elif splitdate[0].isdigit() and splitdate[1].isdigit() and splitdate[2].isdigit():
+                if int(splitdate[0]) in range(0, 2023) and int(splitdate[1]) in range(1, 13) and int(
+                        splitdate[2]) in range(1, 32):
+                    modified_book = {'id': index, 'name': name, 'author': author, 'pubdate': pubdate}
+                    reply = QMessageBox.question(self.Admin,
+                                                 '询问',
+                                                 "确定要修改该图书吗？",
+                                                 QMessageBox.Yes | QMessageBox.No,
+                                                 QMessageBox.No)
+                    if reply == QMessageBox.Yes:
+                        try:
+                            self.WHU_DB.book_modify(modified_book)
+                            self.Admin.lineEdit.clear()
+                            self.Admin.lineEdit_2.clear()
+                            self.Admin.lineEdit_3.clear()
+                            self.Admin.lineEdit_4.clear()
+                            self.Admin.Name_5.clear()
+                            self.Admin.User_9.clear()
+                            self.Admin.User_10.clear()
+                            self.Admin.Port_5.clear()
+                            QMessageBox.information(self.Admin, '通知', '修改图书成功！')
+                            self.Admin.stackedWidget.setCurrentIndex(0)
+                        except Exception as e:
+                            print(e)
+                    else:
+                        pass
+
+    def delete_book(self):
+        index = self.Admin.User_9.text()
+        print(index)
+        reply = QMessageBox.question(self.Admin,
+                                     '询问',
+                                     "确定要删除该图书吗？",
+                                     QMessageBox.Yes | QMessageBox.No,
+                                     QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            try:
+                self.WHU_DB.book_delete(index)
+                self.Admin.lineEdit.clear()
+                self.Admin.lineEdit_2.clear()
+                self.Admin.lineEdit_3.clear()
+                self.Admin.lineEdit_4.clear()
+                self.Admin.User_9.clear()
+                QMessageBox.information(self.Admin, '通知', '删除图书成功！')
+                self.Admin.stackedWidget.setCurrentIndex(0)
+            except Exception as e:
+                print(e)
+        else:
+            pass
+
+
+
+
 
 
 class LoginAdmin(QWidget, Ui_LoginAdmin):
