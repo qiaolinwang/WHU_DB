@@ -490,10 +490,10 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         currentRowCount = self.Reader.tableWidget.rowCount()
                         self.Reader.tableWidget.insertRow(currentRowCount)
                         self.Reader.tableWidget.setItem(currentRowCount, 0, QTableWidgetItem(line[0]))
-                        self.Reader.tableWidget.setItem(currentRowCount, 1, QTableWidgetItem(str(line[1])))
-                        self.Reader.tableWidget.setItem(currentRowCount, 2, QTableWidgetItem(line[2]))
+                        self.Reader.tableWidget.setItem(currentRowCount, 1, QTableWidgetItem(line[2]))
+                        self.Reader.tableWidget.setItem(currentRowCount, 2, QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
                         self.Reader.tableWidget.setItem(currentRowCount, 3,
-                                                         QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
+                                                         QTableWidgetItem(str(line[1])))
                         self.Reader.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
             except Exception as e:
                 print(e)
