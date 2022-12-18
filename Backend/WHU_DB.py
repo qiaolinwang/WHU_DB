@@ -142,6 +142,35 @@ class Database:
         finally:
             connection.close()  # 关闭连接
 
+    # 实现浏览管理员信息
+    def show_admin(self):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        # 获取游标 对数据库进行操作 并且将返回值设置为字典类型
+        cur = connection.cursor(cursor=pymysql.cursors.DictCursor)
+        # 写sql语句
+        sql = "select * from whu_admin"
+        try:
+            cur.execute(sql)
+            admins = cur.fetchall()
+            """
+                此处判断很重要，如果数据库中没有记录，则会结果是一个空的元组类型，
+                如果有记录，则结果是list类型，所以可以根据类型来判断数据库是否为空，
+                如果不是就返回一个空列表。
+            """
+            if type(admins) == list:
+                print("成功获取whu_admin中数据！")
+                return admins
+            else:
+                print("whu_admin表为空")
+                return []
+
+        except Exception as e:
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
     # 实现浏览读者信息
     def show_reader(self):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
@@ -284,6 +313,72 @@ class Database:
         try:
             cur.execute(sql % (name, id, user, password, dep))
             connection.commit()
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 添加管理员信息
+    def insert_admin(self, admin):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        # 获取游标 对数据库进行操作 并且将返回值设置为字典类型
+        cur = connection.cursor(cursor=pymysql.cursors.DictCursor)
+        # 写sql语句
+        sql = "insert into whu_admin(admin_user,admin_id,admin_password) values('%s','%s','%s')"
+        id = admin['id']
+        user = admin['user']
+        password = admin['password']
+        try:
+            cur.execute(sql % (user, id, password))
+            connection.commit()
+            print("添加管理员成功")
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 删除管理员
+    def admin_delete(self, index):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        sql = "delete from whu_admin where admin_id = '%s'"
+        try:
+            cur.execute(sql % index)
+            connection.commit()
+            print("删除管理员成功")
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 查找管理员
+    def search_admin(self, id):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        sql = "select * from whu_admin where admin_id = '%s'" % id
+        try:
+            # 执行sql语句
+            cur.execute(sql)
+            # 获取所有记录列表
+            results = cur.fetchall()
+            if type(results) == tuple:
+                print("查找管理员成功！")
+                return results
+            else:
+                print("未找到管理员")
+                return []
         except Exception as e:
             # 错误回滚
             connection.rollback()
