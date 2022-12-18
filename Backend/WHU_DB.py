@@ -194,6 +194,7 @@ class Database:
         finally:
             connection.close()  # 关闭连接
 
+    # 图书查找
     def search_book(self, book):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
                                      port=self.port,
@@ -221,8 +222,9 @@ class Database:
                 sql = "select * from whu_book where name = '%s' and author = '%s' and pubdate = '%s'" % (
                     name, author, pubdate)
             else:
-                print("错误")
+                print("查找格式错误")
                 connection.close()
+                return
 
             try:
                 # 执行sql语句
@@ -265,7 +267,6 @@ class Database:
             finally:
                 connection.close()  # 关闭连接
 
-
     # 实现添加读者
     def insert_reader(self, reader):
         connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
@@ -283,6 +284,46 @@ class Database:
         try:
             cur.execute(sql % (name, id, user, password, dep))
             connection.commit()
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 修改图书信息
+    def book_modify(self, book):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        id = book['id']
+        name = book['name']
+        author = book['author']
+        pubdate = book['pubdate']
+        sql = "update whu_book set name='%s',author='%s',pubdate='%s' where id='%s'"
+        try:
+            cur.execute(sql % (name, author, pubdate, id))
+            connection.commit()
+            print("修改图书成功")
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 删除图书
+    def book_delete(self, index):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        sql = "delete from whu_book where id = '%s'"
+        try:
+            cur.execute(sql % index)
+            connection.commit()
+            print("删除图书成功")
         except Exception as e:
             # 错误回滚
             connection.rollback()
