@@ -4,7 +4,7 @@ from pymysql import cursors
 
 class Database:
     def __init__(self):
-        # 创建数据库whu_db 创建读者表whu_reader 创建管理员表whu_admin 创建图书表whu_book
+        # 创建数据库whu_db 创建读者表whu_reader 创建管理员表whu_admin 创建图书表whu_book whu_rent
         # 将mysql参数改成本地参数
         self.host = "localhost"
         self.port = 3306
@@ -49,6 +49,9 @@ class Database:
             PRIMARY KEY(id)) """
             cursor.execute(sql)  # 执行sql语句，创建表
             print('创建表whu_book成功')
+            sql2 = "ALTER TABLE whu_book \
+        ADD rent_stu_id BIGINT DEFAULT -1"
+            cursor.execute(sql2)
             sql = 'desc %s' % tableName
             cursor.execute(sql)
             print('whu_book表结构:', cursor.fetchall())  # 显示表结构
@@ -104,6 +107,31 @@ class Database:
             sql = 'desc %s' % tableName
             cursor.execute(sql)
             print('whu_admin表结构:', cursor.fetchall())  # 显示表结构
+
+        except Exception as e:
+            print(e)
+            db.rollback()  # 回滚事务
+
+        finally:
+            cursor.close()
+            db.close()  # 关闭数据库连接
+
+        # 创建借阅者表
+        db = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                             port=self.port,
+                             charset=self.charset)
+
+        cursor = db.cursor()  # 创建游标对象
+
+        try:
+
+            tableName = 'whu_rent'
+            sql = """create table if not exists whu_rent(stu_id BIGINT,book_id BIGINT,PRIMARY KEY(book_id)) """
+            cursor.execute(sql)  # 执行sql语句，创建表
+            print('创建表whu_rent表成功')
+            sql = 'desc %s' % tableName
+            cursor.execute(sql)
+            print('whu_rent表结构:', cursor.fetchall())  # 显示表结构
 
         except Exception as e:
             print(e)
@@ -317,9 +345,11 @@ class Database:
             elif not len(name) == 0 and not len(author) == 0 and len(fardate) == 0 and len(neardate) == 0:
                 sql = "select * from whu_book where name = '%s' and author = '%s'" % (name, author)
             elif not len(name) == 0 and len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
-                sql = "select * from whu_book where name = '%s' and pubdate between '%s' and '%s'" % (name, fardate, neardate)
+                sql = "select * from whu_book where name = '%s' and pubdate between '%s' and '%s'" % (
+                    name, fardate, neardate)
             elif len(name) == 0 and not len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
-                sql = "select * from whu_book where author = '%s' pubdate between '%s' and '%s'" % (author, fardate, neardate)
+                sql = "select * from whu_book where author = '%s' pubdate between '%s' and '%s'" % (
+                    author, fardate, neardate)
             elif not len(name) == 0 and not len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
                 sql = "select * from whu_book where name = '%s' and author = '%s' and pubdate between '%s' and '%s'" % (
                     name, author, fardate, neardate)
@@ -548,6 +578,143 @@ class Database:
             raise e
         finally:
             connection.close()  # 关闭连接
+
+    # 实现修改读者
+    def reader_modify(self, reader):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        id = reader['id']
+        oldpassword = reader['oldpassword']
+        newpassword = reader['newpassword']
+        name = reader['name']
+        dep = reader['dep']
+        sql1 = "select * from whu_reader where stu_id = '%s' and stu_password = '%s'"
+        sql2 = "update whu_reader set stu_name='%s',stu_password='%s',stu_dep='%s' where stu_id='%s'"
+        try:
+            cur.execute(sql1 % (id, oldpassword))
+            # 获取所有记录列表
+            results = cur.fetchall()
+            if len(results) == 0:
+                print("未找到要修改的读者")
+                return False
+            else:
+                cur.execute(sql2 % (name, newpassword, dep, id))
+                connection.commit()
+                print("修改读者成功")
+                return True
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 实现读者借书
+    def book_rent(self, book_id, stu_id):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+
+        cur = connection.cursor()  # 创建游标对象
+        if not stu_id == -1:
+            try:
+                sql_check = "select * from whu_book where id = '%s'" % book_id
+                cur.execute(sql_check)
+                results = cur.fetchall()
+                if len(results) == 0:
+                    print("未找到要借的图书")
+                    return 1
+                else:
+                    sql_check_borrow = "select * from whu_rent where book_id = '%s'" % book_id
+                    cur.execute(sql_check_borrow)
+                    results2 = cur.fetchall()
+                    if not len(results2) == 0:
+                        print("该图书已被借阅")
+                        return 2
+                    else:
+                        sql_borrow = "update whu_book set rent_stu_id ='%s' where id='%s'"
+                        sql_borrow2 = "insert into whu_rent(stu_id,book_id) values('%s','%s')"
+                        cur.execute(sql_borrow % (stu_id, book_id))
+                        connection.commit()
+                        cur.execute(sql_borrow2 % (stu_id, book_id))
+                        connection.commit()
+                        print("借书成功")
+                        return 3
+            except Exception as e:
+                # 错误回滚
+                connection.rollback()
+                raise e
+            finally:
+                connection.close()  # 关闭连接
+        else:
+            connection.close()  # 关闭连接
+            return 4
+
+    # 实现还书
+    def book_return(self, book_id, stu_id):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+
+        cur = connection.cursor()  # 创建游标对象
+        if not stu_id == -1:
+            try:
+                sql_check = "select * from whu_book where id = '%s'" % book_id
+                cur.execute(sql_check)
+                results = cur.fetchall()
+                if len(results) == 0:
+                    print("未找到要还的图书")
+                    return 1
+                else:
+                    sql_check_borrow = "select * from whu_rent where book_id = '%s'" % book_id
+                    cur.execute(sql_check_borrow)
+                    results2 = cur.fetchall()
+                    if len(results2) == 0:
+                        print("该图书未被借阅")
+                        return 2
+                    else:
+                        if not str(results2[0][0]) == str(stu_id):
+                            print("无权归还此书")
+                            return 3
+                        else:
+                            stu_id2 = -1
+                            sql_return = "delete from whu_rent where book_id = '%s'"
+                            sql_return2 = "update whu_book set rent_stu_id ='%s' where id='%s'"
+                            cur.execute(sql_return % (book_id))
+                            connection.commit()
+                            cur.execute(sql_return2 % (stu_id2, book_id))
+                            connection.commit()
+                            print("还书成功")
+                            return 4
+            except Exception as e:
+                # 错误回滚
+                connection.rollback()
+                raise e
+            finally:
+                connection.close()  # 关闭连接
+        else:
+            connection.close()  # 关闭连接
+            return 5
+
+    def browse_rent(self, stu_id):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()  # 创建游标对象
+        try:
+            sql = "select book_id from whu_rent where stu_id = '%s'"
+            cur.execute(sql % stu_id)
+            results = cur.fetchall()
+            return results
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
 
 
 if __name__ == '__main__':
