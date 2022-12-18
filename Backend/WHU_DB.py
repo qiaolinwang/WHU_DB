@@ -261,7 +261,7 @@ class Database:
                 # 获取所有记录列表
                 results = cur.fetchall()
                 print(results)
-                if type(results) == tuple:
+                if not len(results) == 0:
                     print("查找成功！")
                     return results
                 else:
@@ -283,7 +283,80 @@ class Database:
                 cur.execute(sql)
                 # 获取所有记录列表
                 results = cur.fetchall()
-                if type(results) == tuple:
+                if not len(results) == 0:
+                    print("查找成功！")
+                    return results
+                else:
+                    print("未找到")
+                    return []
+            except Exception as e:
+                # 错误回滚
+                connection.rollback()
+                raise e
+            finally:
+                connection.close()  # 关闭连接
+
+    # 由于读者界面的查找出版时间是个范围 又写了个查找函数
+    def reader_search_book(self, book):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        id = book['id']
+        name = book['name']
+        author = book['author']
+        fardate = book['fardate']
+        neardate = book['neardate']
+        if id == -1:
+            if not len(name) == 0 and len(author) == 0 and len(fardate) == 0 and len(neardate) == 0:
+                sql = "select * from whu_book where name = '%s'" % name
+            elif len(name) == 0 and not len(author) == 0 and len(fardate) == 0 and len(neardate) == 0:
+                sql = "select * from whu_book where author = '%s'" % author
+            elif len(name) == 0 and len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
+                sql = "select * from whu_book where pubdate between '%s' and '%s'" % (fardate, neardate)
+            elif not len(name) == 0 and not len(author) == 0 and len(fardate) == 0 and len(neardate) == 0:
+                sql = "select * from whu_book where name = '%s' and author = '%s'" % (name, author)
+            elif not len(name) == 0 and len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
+                sql = "select * from whu_book where name = '%s' and pubdate between '%s' and '%s'" % (name, fardate, neardate)
+            elif len(name) == 0 and not len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
+                sql = "select * from whu_book where author = '%s' pubdate between '%s' and '%s'" % (author, fardate, neardate)
+            elif not len(name) == 0 and not len(author) == 0 and not len(fardate) == 0 and not len(neardate) == 0:
+                sql = "select * from whu_book where name = '%s' and author = '%s' and pubdate between '%s' and '%s'" % (
+                    name, author, fardate, neardate)
+            else:
+                print("查找格式错误")
+                connection.close()
+                return
+
+            try:
+                # 执行sql语句
+                cur.execute(sql)
+                # 获取所有记录列表
+                results = cur.fetchall()
+                print(results)
+                if not len(results) == 0:
+                    print("查找成功！")
+                    return results
+                else:
+                    print("未找到")
+                    return []
+            except Exception as e:
+                # 错误回滚
+                connection.rollback()
+                raise e
+            finally:
+                connection.close()  # 关闭连接
+
+        else:
+            id = book['id']
+            print(id)
+            sql = "select * from whu_book where id = '%s'" % id
+            try:
+                # 执行sql语句
+                cur.execute(sql)
+                # 获取所有记录列表
+                results = cur.fetchall()
+                if not len(results) == 0:
                     print("查找成功！")
                     return results
                 else:
@@ -373,12 +446,62 @@ class Database:
             cur.execute(sql)
             # 获取所有记录列表
             results = cur.fetchall()
-            if type(results) == tuple:
+            if not len(results) == 0:
                 print("查找管理员成功！")
                 return results
             else:
                 print("未找到管理员")
                 return []
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 实现管理员登录
+    def login_admin(self, id, password):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        sql = "select * from whu_admin where admin_id = '%s' and admin_password = '%s'" % (id, password)
+        try:
+            # 执行sql语句
+            cur.execute(sql)
+            # 获取所有记录列表
+            results = cur.fetchall()
+            if not len(results) == 0:
+                print("登录管理员成功！")
+                return True
+            else:
+                print("未找到管理员")
+                return False
+        except Exception as e:
+            # 错误回滚
+            connection.rollback()
+            raise e
+        finally:
+            connection.close()  # 关闭连接
+
+    # 实现读者登录
+    def login_reader(self, id, password):
+        connection = pymysql.connect(host=self.host, user=self.user, password=self.password, database=self.database,
+                                     port=self.port,
+                                     charset=self.charset)
+        cur = connection.cursor()
+        sql = "select * from whu_reader where stu_id = '%s' and stu_password = '%s'" % (id, password)
+        try:
+            # 执行sql语句
+            cur.execute(sql)
+            # 获取所有记录列表
+            results = cur.fetchall()
+            if not len(results) == 0:
+                print("登录读者成功！")
+                return True
+            else:
+                print("未找到该读者")
+                return False
         except Exception as e:
             # 错误回滚
             connection.rollback()
