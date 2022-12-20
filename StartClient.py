@@ -210,6 +210,9 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         else:
             verify = self.WHU_DB.login_admin(userName, password)
             if verify:
+                self.LoginAdmin.lineEdit.clear()
+                self.LoginAdmin.lineEdit_2.clear()
+
                 self.Admin.lineEdit_16.setText(userName)
                 self.Admin.lineEdit_17.setText(password)
                 self.Admin.lineEdit_14.setText(userName)
@@ -248,6 +251,9 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         else:
             verify = self.WHU_DB.login_reader(userName, password)
             if verify:
+                self.LoginReader.lineEdit.clear()
+                self.LoginReader.lineEdit_2.clear()
+
                 self.CurrentReader = userName
                 self.Reader.show()
                 self.LoginReader.close()
@@ -351,6 +357,8 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     self.Admin.stackedWidget.setCurrentIndex(6)
                     self.Admin.tableWidget_5.clearContents()
                     self.Admin.tableWidget_5.setRowCount(0)
+
+
                     for line in results:
                         currentRowCount = self.Admin.tableWidget_5.rowCount()
                         self.Admin.tableWidget_5.insertRow(currentRowCount)
@@ -371,7 +379,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         splitdate = pubdate.split('-')
 
         if len(name) == 0 or len(index) == 0 or len(author) == 0 or len(pubdate) == 0:
-            QMessageBox.warning(self.Admin, 'warning', '请补全图书信息！')
+            QMessageBox.warning(self.Admin, 'warning', '请补书籍信息！')
         else:
             if not index.isdigit():
                 QMessageBox.warning(self.Admin, 'warning', '索引号格式错误！')
@@ -390,6 +398,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         self.Admin.Port_3.clear()
                     except Exception as e:
                         print(e)
+                        QMessageBox.warning(self.Admin, 'warning', '索引已存在！')
                 else:
                     QMessageBox.warning(self.Admin, 'warning', '出版时间格式错误！')
             else:
@@ -732,6 +741,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     QMessageBox.warning(self.Reader, '警告', '该图书已被借阅')
                 if return_num == 3:
                     QMessageBox.information(self.Reader, '通知', '借阅成功！')
+                    self.Reader.lineEdit_7.clear()
                 if return_num == 4:
                     QMessageBox.warning(self.Reader, '警告', '有bug')
                 results = self.WHU_DB.browse_rent(stu_id)
@@ -772,6 +782,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     QMessageBox.warning(self.Reader, '警告', '无权归还此书')
                 if return_num == 4:
                     QMessageBox.information(self.Reader, '通知', '归还成功！')
+                    self.Reader.lineEdit_13.clear()
                 if return_num == 5:
                     QMessageBox.warning(self.Reader, '警告', '有bug')
                 results = self.WHU_DB.browse_rent(stu_id)
