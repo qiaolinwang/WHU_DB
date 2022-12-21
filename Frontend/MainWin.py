@@ -102,7 +102,7 @@ class Ui_MainWin(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "系统入口"))
-        self.label.setText(_translate("Form", "欢迎使用WHU图书论文管理系统"))
+        self.label.setText(_translate("Form", "欢迎使用WHU图书管理系统"))
         self.pushButton_7.setText(_translate("Form", "读者入口"))
         self.pushButton_6.setText(_translate("Form", "管理员入口"))
         self.pushButton_5.setText(_translate("Form", "超级管理员入口"))
