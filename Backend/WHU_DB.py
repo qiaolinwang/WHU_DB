@@ -9,7 +9,7 @@ class Database:
         self.host = "localhost"
         self.port = 3306
         self.user = 'root'
-        self.password = '121517'
+        self.password = '2020300004063@whu.edu.cn'
         self.charset = 'utf8'
 
         db = pymysql.connect(host=self.host, port=self.port, user=self.user, password=self.password,
