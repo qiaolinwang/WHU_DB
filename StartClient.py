@@ -19,7 +19,6 @@ import time
 SuperUser = 'Super'  # 超级管理员用户名
 SuperPassword = '123'  # 超级管理员密码
 
-
 # 读者界面
 class ReaderIn(Ui_Reader):
     def __init__(self, parent=None):
@@ -319,7 +318,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         author = self.Admin.User_4.text()  # 获取作者
         pubdate = self.Admin.Port_2.text()  # 获取出版时间
         splitdate = pubdate.split('-')
-
+        timelen = 0.0
         if len(name) == 0 and len(index) == 0 and len(author) == 0 and len(pubdate) == 0:
             QMessageBox.warning(self.Admin, 'warning', '请填写至少一项信息！')
             return
@@ -345,10 +344,13 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             try:
                 searched_book = {'id': index, 'name': name, 'author': author, 'pubdate': pubdate}
                 print(searched_book)
-
+                # print(222)
+                st = time.time()
                 results = self.WHU_DB.search_book(searched_book)
+                timelen = time.time()-st
+                # print(timelen)
                 if len(results) == 0:
-                    QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                    QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 else:
                     self.Admin.Name_2.clear()
                     self.Admin.User_3.clear()
@@ -368,7 +370,11 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         self.Admin.tableWidget_5.setItem(currentRowCount, 3,
                                                          QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
                         self.Admin.tableWidget_5.setEditTriggers(QAbstractItemView.NoEditTriggers)
+                    QMessageBox.warning(self.Admin, 'warning',
+                                        '查询完毕！查询用时：%4f s' % timelen)
             except Exception as e:
+                QMessageBox.warning(self.Admin, 'warning',
+                                    '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 print(e)
 
     def add_book(self):
@@ -410,7 +416,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         author = self.Admin.User_8.text()  # 获取作者
         pubdate = self.Admin.Port_4.text()  # 获取出版时间
         splitdate = pubdate.split('-')
-
+        timelen = 0.0
         if len(index) == 0 and (len(name) == 0 or len(author) == 0 or len(pubdate) == 0):
             # 至少要输入索引号进行查找
             QMessageBox.warning(self.Admin, 'warning', '请补全图书信息！')
@@ -432,9 +438,17 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             try:
                 searched_book = {'id': index, 'name': name, 'author': author, 'pubdate': pubdate}
                 print(searched_book)
+                # print(333)
+                # results = self.WHU_DB.search_book(searched_book)
+                # if len(results) == 0:
+                #     QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                st = time.time()
                 results = self.WHU_DB.search_book(searched_book)
+                timelen = time.time() - st
+                # print(timelen)
                 if len(results) == 0:
-                    QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                    QMessageBox.warning(self.Admin, 'warning',
+                                        '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 else:
                     # 进入修改和删除页面
                     self.Admin.stackedWidget.setCurrentIndex(7)
@@ -445,6 +459,8 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     self.Admin.User_9.setText(index)
 
             except Exception as e:
+                QMessageBox.warning(self.Admin, 'warning',
+                                    '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 print(e)
 
     def modify_book(self):
@@ -528,7 +544,7 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         author = self.Reader.lineEdit_12.text()  # 获取作者
         fardate = self.Reader.lineEdit_10.text()
         neardate = self.Reader.lineEdit_11.text()
-
+        timelen = 0.0
         splitdate1 = fardate.split('-')
         splitdate2 = neardate.split('-')
 
@@ -561,10 +577,16 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             try:
                 searched_book = {'id': index, 'name': name, 'author': author, 'fardate': fardate, 'neardate': neardate}
                 print(searched_book)
-
-                results = self.WHU_DB.reader_search_book(searched_book)
+                # print(111)
+                # results = self.WHU_DB.reader_search_book(searched_book)
+                # if len(results) == 0:
+                #     QMessageBox.warning(self.Reader, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                st = time.time()
+                results = self.WHU_DB.search_book(searched_book)
+                timelen = time.time() - st
                 if len(results) == 0:
-                    QMessageBox.warning(self.Reader, 'warning', '未查找到符合结果，请检查输入信息是否正确！')
+                    QMessageBox.warning(self.Reader, 'warning',
+                                        '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 else:
                     self.Reader.tableWidget.clearContents()
                     self.Reader.tableWidget.setRowCount(0)
@@ -578,7 +600,11 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         self.Reader.tableWidget.setItem(currentRowCount, 3,
                                                         QTableWidgetItem(str(line[1])))
                         self.Reader.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+                    QMessageBox.warning(self.Reader, 'warning',
+                                        '查询完毕！查询用时：%4f s' % timelen)
             except Exception as e:
+                QMessageBox.warning(self.Reader, 'warning',
+                                    '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 print(e)
 
     def delete_book(self):
