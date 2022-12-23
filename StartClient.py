@@ -19,6 +19,7 @@ import time
 SuperUser = 'Super'  # 超级管理员用户名
 SuperPassword = '123'  # 超级管理员密码
 
+
 # 读者界面
 class ReaderIn(Ui_Reader):
     def __init__(self, parent=None):
@@ -182,7 +183,8 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                             self.Reader.tableWidget_2.insertRow(currentRowCount)
                             self.Reader.tableWidget_2.setItem(currentRowCount, 0, QTableWidgetItem(book[0][0]))
                             self.Reader.tableWidget_2.setItem(currentRowCount, 1, QTableWidgetItem(book[0][2]))
-                            self.Reader.tableWidget_2.setItem(currentRowCount, 2, QTableWidgetItem(str(book[0][3].strftime('%Y-%m-%d'))))
+                            self.Reader.tableWidget_2.setItem(currentRowCount, 2,
+                                                              QTableWidgetItem(str(book[0][3].strftime('%Y-%m-%d'))))
                             self.Reader.tableWidget_2.setItem(currentRowCount, 3, QTableWidgetItem(str(book[0][1])))
                             self.Reader.tableWidget_2.setEditTriggers(QAbstractItemView.NoEditTriggers)
                 except Exception as e:
@@ -220,10 +222,10 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                 self.Admin.lineEdit_13.setText(password)
                 self.Admin.lineEdit_18.setText(userName)
                 self.Admin.lineEdit_19.setText(password)
-                self.Admin.lineEdit_8.setText(userName)
-                self.Admin.lineEdit_6.setText(password)
-                self.Admin.lineEdit_9.setText(userName)
-                self.Admin.lineEdit_7.setText(password)
+                # self.Admin.lineEdit_8.setText(userName)
+                # self.Admin.lineEdit_6.setText(password)
+                # self.Admin.lineEdit_9.setText(userName)
+                # self.Admin.lineEdit_7.setText(password)
                 self.Admin.show()
                 self.LoginAdmin.close()
             else:
@@ -269,6 +271,9 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
             try:
                 self.Admin.tableWidget_4.clearContents()
                 self.Admin.tableWidget_4.setRowCount(0)
+                self.borrowedcount = 0
+                self.totalbook = 0
+                currentRowCount = 0
                 for line in books:
                     currentRowCount = self.Admin.tableWidget_4.rowCount()
                     self.Admin.tableWidget_4.insertRow(currentRowCount)
@@ -280,10 +285,14 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     if line['rent_stu_id'] == -1:
                         self.Admin.tableWidget_4.setItem(currentRowCount, 4, QTableWidgetItem("暂未借出"))
                     else:
+                        self.borrowedcount += 1
                         self.Admin.tableWidget_4.setItem(currentRowCount, 4, QTableWidgetItem(str(line['rent_stu_id'])))
                     self.Admin.tableWidget_4.setEditTriggers(QAbstractItemView.NoEditTriggers)
                 print("浏览图书成功")
-
+                self.totalbook = currentRowCount+1
+                self.Admin.lineEdit_9.setText(str(self.totalbook))
+                self.Admin.lineEdit_7.setText(str(self.borrowedcount))
+                self.Admin.lineEdit_6.setText(str(self.borrowedcount))
             except Exception as e:
                 print(e)
         else:
@@ -294,8 +303,10 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
         print(readers)
         if not len(readers) == 0:
             try:
+                self.totalreader = 0
                 self.Admin.tableWidget_3.clearContents()
                 self.Admin.tableWidget_3.setRowCount(0)
+                currentRowCount = 0
                 for line in readers:
                     currentRowCount = self.Admin.tableWidget_3.rowCount()
                     self.Admin.tableWidget_3.insertRow(currentRowCount)
@@ -306,7 +317,8 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     self.Admin.tableWidget_3.setItem(currentRowCount, 4, QTableWidgetItem(line['stu_dep']))
                     self.Admin.tableWidget_3.setEditTriggers(QAbstractItemView.NoEditTriggers)
                 print("浏览读者成功")
-
+                self.totalreader = currentRowCount+1
+                self.Admin.lineEdit_8.setText(str(self.totalreader))
             except Exception as e:
                 print(e)
         else:
@@ -347,10 +359,11 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                 # print(222)
                 st = time.time()
                 results = self.WHU_DB.search_book(searched_book)
-                timelen = time.time()-st
+                timelen = time.time() - st
                 # print(timelen)
                 if len(results) == 0:
-                    QMessageBox.warning(self.Admin, 'warning', '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
+                    QMessageBox.warning(self.Admin, 'warning',
+                                        '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
                 else:
                     self.Admin.Name_2.clear()
                     self.Admin.User_3.clear()
@@ -359,7 +372,6 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                     self.Admin.stackedWidget.setCurrentIndex(6)
                     self.Admin.tableWidget_5.clearContents()
                     self.Admin.tableWidget_5.setRowCount(0)
-
 
                     for line in results:
                         currentRowCount = self.Admin.tableWidget_5.rowCount()
@@ -370,8 +382,8 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         self.Admin.tableWidget_5.setItem(currentRowCount, 3,
                                                          QTableWidgetItem(str(line[3].strftime('%Y-%m-%d'))))
                         self.Admin.tableWidget_5.setEditTriggers(QAbstractItemView.NoEditTriggers)
-                    QMessageBox.warning(self.Admin, 'warning',
-                                        '查询完毕！查询用时：%4f s' % timelen)
+                    QMessageBox.information(self.Admin, '通知',
+                                            '查询完毕！查询用时：%4f s' % timelen)
             except Exception as e:
                 QMessageBox.warning(self.Admin, 'warning',
                                     '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
@@ -600,8 +612,8 @@ class MainWin(QWidget, Ui_MainWin):  # 实现前后端功能对接
                         self.Reader.tableWidget.setItem(currentRowCount, 3,
                                                         QTableWidgetItem(str(line[1])))
                         self.Reader.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-                    QMessageBox.warning(self.Reader, 'warning',
-                                        '查询完毕！查询用时：%4f s' % timelen)
+                    QMessageBox.information(self.Reader, '通知',
+                                            '查询完毕！查询用时：%4f s' % timelen)
             except Exception as e:
                 QMessageBox.warning(self.Reader, 'warning',
                                     '未查找到符合结果，请检查输入信息是否正确！查询用时：%4f s' % timelen)
