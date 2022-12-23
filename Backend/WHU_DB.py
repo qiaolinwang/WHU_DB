@@ -9,7 +9,7 @@ class Database:
         self.host = "localhost"
         self.port = 3306
         self.user = 'root'
-        self.password = '2020300004063@whu.edu.cn'
+        self.password = '121517'
         self.charset = 'utf8'
 
         db = pymysql.connect(host=self.host, port=self.port, user=self.user, password=self.password,
@@ -288,7 +288,6 @@ class Database:
                 cur.execute(sql)
                 # 获取所有记录列表
                 results = cur.fetchall()
-                print(results)
                 if not len(results) == 0:
                     print("查找成功！")
                     return results
@@ -363,7 +362,6 @@ class Database:
                 cur.execute(sql)
                 # 获取所有记录列表
                 results = cur.fetchall()
-                print(results)
                 if not len(results) == 0:
                     print("查找成功！")
                     return results
