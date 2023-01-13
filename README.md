@@ -7,6 +7,9 @@
   用户管理：用户注册、修改信息、借书还书、浏览读者
   图书管理：增删改查
   管理员管理：增删查
+  
+ 更改WHU_DB.py中的参数可连接本地Mysql，同时StartClient启动客户端，超级管理员用户密码默认在代码中
+ 通过登录超级管理员界面创建管理员，通过登录读者界面可以注册读者
 
 <img src="https://user-images.githubusercontent.com/76542779/208841073-65a35b1e-ec3e-4d47-b3f4-76dd8bef2438.png" width="300px">
 <img src="https://user-images.githubusercontent.com/76542779/208841273-a2148460-21d0-47f4-83bb-c62c2f5aea00.png" width="1000px">
